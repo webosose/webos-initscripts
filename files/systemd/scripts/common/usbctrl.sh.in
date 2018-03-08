@@ -1,0 +1,60 @@
+#!/bin/sh
+# Copyright (c) 2017-2018 LG Electronics, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# If dropbear is in the image the we should be on an eng image
+if [ -x /usr/sbin/dropbear ]; then
+    mkdir -p  /var/gadget/ || true
+    touch /var/gadget/novacom_enabled
+fi
+
+if [ -e /sys/class/usb_gadget/config_num ]; then
+    if [[ -e /var/gadget/usbnet_enabled && -e /var/gadget/novacom_enabled ]]; then
+        echo 5 > /sys/class/usb_gadget/config_num
+    elif [ -e /var/gadget/usbnet_enabled ]; then
+        echo 5 > /sys/class/usb_gadget/config_num
+    elif [ -e /var/gadget/novacom_enabled ]; then
+        echo 2 > /sys/class/usb_gadget/config_num
+    else
+        echo 1 > /sys/class/usb_gadget/config_num
+fi
+else
+    export machineType=`uname -m`
+
+    if [[ "$machineType" == "armv7l" ]];then
+        if [[ -e /var/gadget/usbnet_enabled && -e /var/gadget/novacom_enabled ]]; then
+            /sbin/modprobe -q g_composite product=0x101 || true
+        elif [ -e /var/gadget/usbnet_enabled ]; then
+            /sbin/modprobe -q g_composite product=0x101 || true
+        elif [ -e /var/gadget/novacom_enabled ]; then
+            /sbin/modprobe -q g_composite product=0x8002 || true
+        else
+            /sbin/modprobe -q g_composite product=0x8004 || true
+    fi
+    elif [[ "$machineType" == "armv6l" ]];then
+        if [[ -e /var/gadget/usbnet_enabled && -e /var/gadget/novacom_enabled ]]; then
+            /sbin/modprobe -q g_composite product=0x103 || true
+        elif [ -e /var/gadget/usbnet_enabled ]; then
+            /sbin/modprobe -q g_composite product=0x103 || true
+        elif [ -e /var/gadget/novacom_enabled ]; then
+            /sbin/modprobe -q g_composite product=0x8012 || true
+        else
+            /sbin/modprobe -q g_composite product=0x8012 || true
+        fi
+    else
+        /sbin/modprobe -q g_composite || true
+    fi
+fi
