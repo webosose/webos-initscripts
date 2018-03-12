@@ -30,8 +30,7 @@ add_subdirectory(src/utils)
 
 ##### environments #####
 webos_configure_source_files(systemd_in_global_env
-    files/systemd/environments/30-webos-global.conf
-    files/systemd/environments/31-surface-manager.conf)
+    files/systemd/environments/30-webos-global.conf)
 
 ##### overrides #####
 set(systemd_override
@@ -53,7 +52,6 @@ webos_configure_source_files(systemd_in_scripts
     files/systemd/scripts/common/populate-volatile.sh
     files/systemd/scripts/common/sam.sh
     files/systemd/scripts/common/settings-service.sh
-    files/systemd/scripts/common/surface-manager-env.sh
     files/systemd/scripts/common/usbctrl.sh
     files/systemd/scripts/common/wpa-supplicant.sh)
 
