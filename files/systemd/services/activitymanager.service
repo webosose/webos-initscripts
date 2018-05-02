@@ -20,6 +20,8 @@
 Description=webos - "%n"
 Requires=ls-hubd.service configurator-db8.service
 After=ls-hubd.service configurator-db8.service
+Wants=configurator-activity.service
+Before=configurator-activity.service
 
 [Service]
 Type=notify
