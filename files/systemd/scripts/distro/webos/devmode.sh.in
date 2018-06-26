@@ -16,12 +16,10 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # Script:
-# - make sure devmode is enabled in the emulator (/var/luna/preferences) and
 # - install SDK ssh key (from devmode service ssh dir to /home/developer/.ssh)
 # - start devmode (if enabled)
 
 if grep -qs "qemux86" /etc/hostname ; then
-    touch /var/luna/preferences/devmode_enabled
     HOMEDIR=/home/developer
     if [ ! -e ${HOMEDIR}/.ssh/authorized_keys ] ; then
         mkdir -p ${HOMEDIR}/.ssh
