@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2018 LG Electronics, Inc.
+# Copyright (c) 2018 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,11 +15,13 @@
 # SPDX-License-Identifier: Apache-2.0
 
 [Unit]
-Description="%n"
-Wants=audiod.service \
-      audiooutputd.service \
-      booster.service \
-      crashd.service \
-      pm-log-daemon.service \
-      sleepd.service \
-      webos-bluetooth-service.service
+Description=webos - "%n"
+Requires=ls-hubd.service
+After=ls-hubd.service
+
+[Service]
+Type=simple
+OOMScoreAdjust=-500
+EnvironmentFile=-/var/systemd/system/env/audiooutputd.env
+ExecStart=/usr/sbin/audiooutputd
+Restart=on-failure

@@ -74,6 +74,7 @@ set(systemd_units
     files/systemd/services/common/activitymanager.service
     files/systemd/services/common/appinstalld.service
     files/systemd/services/common/audiod.service
+    files/systemd/services/common/audiooutputd.service
     files/systemd/services/common/booster.service
     files/systemd/services/common/bootd.service
     files/systemd/services/common/bugreportd.service
