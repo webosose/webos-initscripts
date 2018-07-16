@@ -28,8 +28,7 @@ Wants=connman.service \
       webos-connman-adapter.service \
       wpa-supplicant.service
 
-Wants=event-device-creator.service \
-      jail.service \
+Wants=jail.service \
       luna-sys-service.service \
       pm-klog-daemon.service \
       webapp-mgr.service

@@ -77,7 +77,6 @@ set(systemd_units
     files/systemd/services/common/audiooutputd.service
     files/systemd/services/common/booster.service
     files/systemd/services/common/bootd.service
-    files/systemd/services/common/bugreportd.service
     files/systemd/services/common/configd.service
     files/systemd/services/common/configurator-activity.service
     files/systemd/services/common/configurator-db8.service
@@ -91,7 +90,6 @@ set(systemd_units
     files/systemd/services/common/dropbear.service
     files/systemd/services/common/dropbear.socket
     files/systemd/services/common/ecryptfs.service
-    files/systemd/services/common/event-device-creator.service
     files/systemd/services/common/event-monitor.service
     files/systemd/services/common/jail.service
     files/systemd/services/common/ls-hubd.service
