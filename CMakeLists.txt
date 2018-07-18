@@ -98,7 +98,6 @@ set(systemd_units
     files/systemd/services/common/luna-download-mgr.service
     files/systemd/services/common/luna-sys-service.service
     files/systemd/services/common/maliit-server.service
-    files/systemd/services/common/node-fork-server.service
     files/systemd/services/common/notificationmgr.service
     files/systemd/services/common/nyx-utils.service
     files/systemd/services/common/pacrunner.service

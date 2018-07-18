@@ -31,6 +31,5 @@ Wants=connman.service \
 Wants=event-device-creator.service \
       jail.service \
       luna-sys-service.service \
-      node-fork-server.service \
       pm-klog-daemon.service \
       webapp-mgr.service
