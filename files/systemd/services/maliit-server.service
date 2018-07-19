@@ -18,6 +18,8 @@
 Description=webos - "%n"
 Requires=ls-hubd.service settings-service.service surface-manager.service
 After=ls-hubd.service settings-service.service surface-manager.service
+StartLimitBurst=10
+StartLimitIntervalSec=1
 
 [Service]
 Type=simple
@@ -29,4 +31,4 @@ Environment=MALIIT_CONF_FILELOCK=/var/lib/maliit/server.conf.lock
 Environment=MALIIT_CONF_FILETEMP=/var/lib/maliit/server.conf.*
 EnvironmentFile=-/var/systemd/system/env/maliit-server.env
 ExecStart=/etc/systemd/system/scripts/maliit-server.sh
-Restart=on-failure
+Restart=always
