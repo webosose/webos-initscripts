@@ -55,7 +55,6 @@ webos_configure_source_files(systemd_in_scripts
     files/systemd/scripts/common/settings-service.sh
     files/systemd/scripts/common/surface-manager-env.sh
     files/systemd/scripts/common/usbctrl.sh
-    files/systemd/scripts/common/webos-nettools.sh
     files/systemd/scripts/common/wpa-supplicant.sh)
 
 if(${WEBOS_TARGET_DISTRO} STREQUAL "webos")
@@ -112,7 +111,6 @@ set(systemd_units
     files/systemd/services/common/umediaserver.service
     files/systemd/services/common/usbctrl.service
     files/systemd/services/common/webos-connman-adapter.service
-    files/systemd/services/common/webos-nettools.service
     files/systemd/services/common/wpa-supplicant.service
     files/systemd/services/common/wpa_supplicant.service
     files/systemd/targets/default-webos.target

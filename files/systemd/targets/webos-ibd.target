@@ -24,7 +24,6 @@ Wants=pulseaudio.service
 Wants=connman.service \
       dropbear.service \
       pacrunner.service \
-      webos-nettools.service \
       webos-connman-adapter.service \
       wpa-supplicant.service
 
