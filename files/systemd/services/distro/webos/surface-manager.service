@@ -18,8 +18,6 @@
 Description=webos - "%n"
 Requires=ls-hubd.service
 After=ls-hubd.service
-Wants=webapp-mgr.service
-Before=webapp-mgr.service
 StartLimitBurst=10
 StartLimitIntervalSec=1
 
@@ -31,5 +29,6 @@ ExecStartPre=-/bin/mkdir -m 700 -p ${XDG_DIR}
 ExecStartPre=-/bin/ln -s ${XDG_DIR} /var/run/xdg
 ExecStartPre=-/bin/mkdir -p ${WEBOS_SNAPSHOT_BACKUP_PATH}
 ExecStart=/usr/bin/surface-manager.sh
+ExecStop=-/bin/rm /tmp/lsm-ready
 TimeoutStopSec=5
 Restart=on-failure

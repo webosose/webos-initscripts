@@ -90,6 +90,8 @@ set(systemd_units
     files/systemd/services/common/event-monitor.service
     files/systemd/services/common/jail.service
     files/systemd/services/common/ls-hubd.service
+    files/systemd/services/common/lsm-ready.path
+    files/systemd/services/common/lsm-ready.service
     files/systemd/services/common/luna-download-mgr.service
     files/systemd/services/common/luna-sys-service.service
     files/systemd/services/common/maliit-server.service
