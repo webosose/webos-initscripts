@@ -27,5 +27,4 @@ Wants=bootd.service \
       populate-volatile.service \
       sam.service \
       surface-manager.service \
-      surface-manager-finalize.service \
       usbctrl.service

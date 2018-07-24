@@ -107,7 +107,6 @@ set(systemd_units
     files/systemd/services/common/settings-service.service
     files/systemd/services/common/sleepd.service
     files/systemd/services/common/sntp.service
-    files/systemd/services/common/surface-manager-finalize.service
     files/systemd/services/common/umediaserver.service
     files/systemd/services/common/usbctrl.service
     files/systemd/services/common/webos-connman-adapter.service
