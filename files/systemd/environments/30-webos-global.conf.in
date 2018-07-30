@@ -47,3 +47,6 @@ DefaultEnvironment=QT_WAYLAND_HARDWARE_INTEGRATION=wayland-egl
 DefaultEnvironment=XDG_DIR=/tmp/xdg
 DefaultEnvironment=XDG_RUNTIME_DIR=/tmp/xdg
 DefaultEnvironment=WEBOS_GL_DISABLE_THREADED_RENDERING=1
+
+# ROS2 settings
+DefaultEnvironment=AMENT_PREFIX_PATH=/usr
