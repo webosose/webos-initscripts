@@ -14,7 +14,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# WebAppMgr is responsible for running Enyo applications on webOS with WebKit2
+# WebAppMgr is responsible for running Enyo applications on webOS
 
 [Unit]
 Description=webos - "%n"
@@ -27,10 +27,9 @@ BindsTo=surface-manager.service
 Type=simple
 OOMScoreAdjust=-1000
 EnvironmentFile=-/var/systemd/system/env/webapp-mgr.env
-ExecStartPre=-/bin/chmod 777 /dev/vchiq # for using broadcom video hw codec
+# for using broadcom video hw codec
+ExecStartPre=-/bin/chmod 777 /dev/vchiq
 ExecStart=/etc/systemd/system/scripts/webapp-mgr.sh
-ExecStartPost=/bin/chgrp compositor /dev/mem
-ExecStartPost=-/bin/chgrp compositor /dev/shm/sem.kadp-*
-ExecStartPost=/bin/chmod 660 /dev/mem
-ExecStartPost=-/bin/chmod 775 /dev/shm/sem.kadp-*
+ExecStartPost=-/bin/chgrp compositor /dev/mem
+ExecStartPost=-/bin/chmod 660 /dev/mem
 Restart=on-failure
