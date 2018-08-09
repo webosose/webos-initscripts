@@ -17,8 +17,11 @@
 [Unit]
 Description=webos - "%n"
 ConditionPathExists=/tmp/boot-done
+Requires=surface-manager.service
+BindsTo=surface-manager.service
 
 [Service]
 Type=oneshot
 ExecStart=/bin/systemctl stop webapp-mgr
 ExecStart=/bin/systemctl start webapp-mgr
+RemainAfterExit=yes
