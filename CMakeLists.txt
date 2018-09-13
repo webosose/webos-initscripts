@@ -61,10 +61,8 @@ if(${WEBOS_TARGET_DISTRO} STREQUAL "webos")
     webos_configure_source_files(systemd_distro_in_scripts
         files/systemd/scripts/distro/${WEBOS_TARGET_DISTRO}/devmode.sh
         files/systemd/scripts/distro/${WEBOS_TARGET_DISTRO}/pm-log-daemon-stop.sh
-        files/systemd/scripts/distro/${WEBOS_TARGET_DISTRO}/swap-on.sh
         files/systemd/scripts/distro/${WEBOS_TARGET_DISTRO}/webapp-mgr.sh
-        files/systemd/scripts/distro/${WEBOS_TARGET_DISTRO}/webos-bluetooth-service.sh
-        files/systemd/scripts/distro/${WEBOS_TARGET_DISTRO}/zram-on.sh)
+        files/systemd/scripts/distro/${WEBOS_TARGET_DISTRO}/webos-bluetooth-service.sh)
 endif()
 
 set(systemd_enable_systemd_environments
@@ -130,10 +128,8 @@ if(${WEBOS_TARGET_DISTRO} STREQUAL "webos")
         files/systemd/services/distro/${WEBOS_TARGET_DISTRO}/pm-log-daemon.service
         files/systemd/services/distro/${WEBOS_TARGET_DISTRO}/pulseaudio.service
         files/systemd/services/distro/${WEBOS_TARGET_DISTRO}/surface-manager.service
-        files/systemd/services/distro/${WEBOS_TARGET_DISTRO}/swap-on.service
         files/systemd/services/distro/${WEBOS_TARGET_DISTRO}/webapp-mgr.service
-        files/systemd/services/distro/${WEBOS_TARGET_DISTRO}/webos-bluetooth-service.service
-        files/systemd/services/distro/${WEBOS_TARGET_DISTRO}/zram-on.service)
+        files/systemd/services/distro/${WEBOS_TARGET_DISTRO}/webos-bluetooth-service.service)
 endif()
 
 ##### tmpfiles #####
