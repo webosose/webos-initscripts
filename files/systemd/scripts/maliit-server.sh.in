@@ -40,6 +40,7 @@ then
     echo "libplugin-japanese.so:japanese" >> $MALIIT_CONF_FILE
 fi
 
+export LD_PRELOAD=/usr/lib/libsystrim.so.3
 /usr/sbin/MaliitServer
 
 if [ -z "$WAYLAND_DISPLAY" ]; then
