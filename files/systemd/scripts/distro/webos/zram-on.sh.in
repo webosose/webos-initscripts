@@ -1,0 +1,105 @@
+#!/bin/sh
+# Copyright (c) 2018 LG Electronics, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+ZRAM_PATH=/sys/devices/virtual/block/zram0
+
+if [ -d $ZRAM_PATH ]; then
+    SWAP_DEV=/dev/zram0
+    if [ -b $SWAP_DEV ]
+    then
+        echo "SWAP Device $SWAP_DEV"
+    else
+        SWAP_DEV=/tmp/zram0
+        MAJ=$(awk -F: '{print $1}' $ZRAM_PATH/dev)
+        MIN=$(awk -F: '{print $2}' $ZRAM_PATH/dev)
+        echo "mknod $SWAP_DEV b $MAJ $MIN"
+        mknod $SWAP_DEV b $MAJ $MIN
+        echo "Make SWAP Device $SWAP_DEV"
+    fi
+
+    ZRAM_CONF=$HOME/zramswap.conf
+    MAX_COMP_STREAMS=`grep max_comp_streams $ZRAM_CONF | awk -F":" '{print $2}'`
+    if [ -z $MAX_COMP_STREAMS ]; then
+        NCPU=`cat /proc/cpuinfo | grep processor | wc -l`
+        MAX_COMP_STREAMS=$(($NCPU*2))
+    fi
+
+    IS_CHECK_CRYPTO=YES
+    CHECK_ALG_FILE=/proc/crypto
+    COMP_ALGORITHM=`grep comp_algorithm $ZRAM_CONF | awk -F":" '{print $2}'`
+    if [ -z $COMP_ALGORITHM ]; then
+        if [ $IS_CHECK_CRYPTO = NO ]; then
+            CHECK_ALG_FILE=$ZRAM_PATH/comp_algorithm
+        fi
+
+        COMP_ALG_ORDER="zacc lz4 lzo"
+        for alg in $COMP_ALG_ORDER
+        do
+            if [ -n "`grep $alg $CHECK_ALG_FILE`" ]
+            then
+                COMP_ALGORITHM=$alg
+                break
+            fi
+        done
+    fi
+
+    DISKSIZE=`grep disksize $ZRAM_CONF | awk -F":" '{print $2}'`
+    if [ -z $DISKSIZE ]; then
+        ZRAM_RATIO=25
+        ZRAM_MIN_DISKSIZE=350
+        BASE_FREE=1536
+        # get pagesize
+        MAPPED_SIZE=`cat /proc/meminfo | grep Mapped | awk '{print $2}'`
+        MAPPED_COUNT=`cat /proc/vmstat | grep mapped | awk '{print $2}'`
+        PAGE_SIZE=$(($MAPPED_SIZE*1024/$MAPPED_COUNT))
+
+        # get total free
+        TOTAL_FREE=0
+        while read line
+        do
+            ZONE=`echo $line | awk '/^Node/ {print $4}'`
+            if [ "$ZONE" = "Normal" ] || [ "$ZONE" = "HighMem" ]
+            then
+                read line
+                until [ "`echo $line | awk '{print $1}'`" = "managed" ]; do
+                    read line
+                done
+                ZONESIZE=`echo $line | awk '{print $2}'`
+                TOTAL_FREE=`expr $TOTAL_FREE + $ZONESIZE`
+            fi
+        done < /proc/zoneinfo
+        TOTAL_FREE=$(($TOTAL_FREE*$PAGE_SIZE/1024/1024))
+
+        if [ $TOTAL_FREE -lt $BASE_FREE ]; then
+            ZRAM_RATIO=40
+        fi
+
+        # calculate zram disksize
+        DISKSIZE=$(($TOTAL_FREE*$ZRAM_RATIO/100))
+        if [ $DISKSIZE -lt $ZRAM_MIN_DISKSIZE ]; then
+            DISKSIZE=$ZRAM_MIN_DISKSIZE
+        fi
+        echo "33333 DISKSIZE/TOTAL_FREE : " $DISKSIZE "/" $TOTAL_FREE
+    fi
+    ZRAM_SIZE=$(($DISKSIZE*1024*1024))
+
+    echo $MAX_COMP_STREAMS > $ZRAM_PATH/max_comp_streams || true
+    if [ ! -z $COMP_ALGORITHM]; then
+        echo $COMP_ALGORITHM   > $ZRAM_PATH/comp_algorithm || true
+    fi
+    echo $ZRAM_SIZE        > $ZRAM_PATH/disksize
+fi
