@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2018 LG Electronics, Inc.
+# Copyright (c) 2018 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,16 +14,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# Finalize the startup of the compositor
-
 [Unit]
 Description=webos - "%n"
-Requires=surface-manager.service
-After=surface-manager.service
 
-[Service]
-Type=oneshot
-# Once we can get the compositor out of root mode we can get rid of this script
-ExecStart=/bin/chown -R root:compositor ${XDG_DIR}
-ExecStart=/bin/chmod -R 770 ${XDG_DIR}
-RemainAfterExit=no
+[Path]
+PathExists=/tmp/lsm-ready

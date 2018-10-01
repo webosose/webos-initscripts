@@ -30,8 +30,7 @@ add_subdirectory(src/utils)
 
 ##### environments #####
 webos_configure_source_files(systemd_in_global_env
-    files/systemd/environments/30-webos-global.conf
-    files/systemd/environments/31-surface-manager.conf)
+    files/systemd/environments/30-webos-global.conf)
 
 ##### overrides #####
 set(systemd_override
@@ -53,7 +52,6 @@ webos_configure_source_files(systemd_in_scripts
     files/systemd/scripts/common/populate-volatile.sh
     files/systemd/scripts/common/sam.sh
     files/systemd/scripts/common/settings-service.sh
-    files/systemd/scripts/common/surface-manager-env.sh
     files/systemd/scripts/common/usbctrl.sh
     files/systemd/scripts/common/wpa-supplicant.sh)
 
@@ -94,6 +92,8 @@ set(systemd_units
     files/systemd/services/common/event-monitor.service
     files/systemd/services/common/jail.service
     files/systemd/services/common/ls-hubd.service
+    files/systemd/services/common/lsm-ready.path
+    files/systemd/services/common/lsm-ready.service
     files/systemd/services/common/luna-download-mgr.service
     files/systemd/services/common/luna-sys-service.service
     files/systemd/services/common/maliit-server.service
@@ -109,7 +109,6 @@ set(systemd_units
     files/systemd/services/common/settings-service.service
     files/systemd/services/common/sleepd.service
     files/systemd/services/common/sntp.service
-    files/systemd/services/common/surface-manager-finalize.service
     files/systemd/services/common/umediaserver.service
     files/systemd/services/common/usbctrl.service
     files/systemd/services/common/webos-connman-adapter.service
