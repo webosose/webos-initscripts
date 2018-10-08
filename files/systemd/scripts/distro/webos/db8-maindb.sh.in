@@ -19,8 +19,11 @@
 BLOCKS_TOTAL=$(stat -f -c "%b" /var/db)
 BLOCKS_FREE=$(stat -f -c "%a" /var/db)
 
-# If /var/db contain less 4.5% of free space, do factory reset
-BLOCKS_THRESHOLD=$((($BLOCKS_TOTAL/1000)*45))
+# If /var/db contain less than the minimum required free space, do factory reset
+WEBOS_THRESHOLD_SIZE_MAINDB=4194304
+DB_MINIMUM_SIZE_IN_BYTES=$WEBOS_THRESHOLD_SIZE_MAINDB
+BLOCK_SIZE=$(stat -f -c "%s" /var/db)
+BLOCKS_THRESHOLD=$(($DB_MINIMUM_SIZE_IN_BYTES/$BLOCK_SIZE))
 
 # if not enough disk space, make factory reset and reboot.
 if [ "$BLOCKS_FREE" -le "$BLOCKS_THRESHOLD" ]; then

@@ -45,7 +45,6 @@ endif()
 webos_configure_source_files(systemd_in_scripts
     files/systemd/scripts/common/configurator-db8.sh
     files/systemd/scripts/common/connman.sh
-    files/systemd/scripts/common/db8-maindb.sh
     files/systemd/scripts/common/jail.sh
     files/systemd/scripts/common/luna-download-mgr.sh
     files/systemd/scripts/common/maliit-server.sh
@@ -57,6 +56,7 @@ webos_configure_source_files(systemd_in_scripts
 
 if(${WEBOS_TARGET_DISTRO} STREQUAL "webos")
     webos_configure_source_files(systemd_distro_in_scripts
+        files/systemd/scripts/distro/${WEBOS_TARGET_DISTRO}/db8-maindb.sh
         files/systemd/scripts/distro/${WEBOS_TARGET_DISTRO}/devmode.sh
         files/systemd/scripts/distro/${WEBOS_TARGET_DISTRO}/pm-log-daemon-stop.sh
         files/systemd/scripts/distro/${WEBOS_TARGET_DISTRO}/swap-on.sh
