@@ -46,7 +46,7 @@ void Logger::write(std::string message)
         return;
     }
 
-    sprintf(buffer, "[%lld.%.9ld] %s\n", (long long)now.tv_sec, now.tv_nsec, message.c_str());
+    snprintf(buffer, sizeof(buffer), "[%lld.%.9ld] %s\n", (long long)now.tv_sec, now.tv_nsec, message.c_str());
     fileStream << buffer;
 }
 
