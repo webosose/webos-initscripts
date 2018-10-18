@@ -44,7 +44,7 @@ bool Systemd::notify(string name) {
   }
 
   char debug[256];
-  sprintf(debug, "[DEBUG] name(%s) / pid(%d)", name.c_str(), pid);
+  snprintf(debug, sizeof(debug), "[DEBUG] name(%s) / pid(%d)", name.c_str(), pid);
   g_logger.write(debug);
 
   if (sd_pid_notify(pid, 0, m_state.c_str()) <= 0) {
