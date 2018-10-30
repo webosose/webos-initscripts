@@ -109,6 +109,8 @@ set(systemd_units
     files/systemd/services/common/settings-service.service
     files/systemd/services/common/sleepd.service
     files/systemd/services/common/sntp.service
+    files/systemd/services/common/systemd-journal-flush.service
+    files/systemd/services/common/systemd-journald.service
     files/systemd/services/common/umediaserver.service
     files/systemd/services/common/usbctrl.service
     files/systemd/services/common/webos-connman-adapter.service
