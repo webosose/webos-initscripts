@@ -18,8 +18,8 @@
 
 [Unit]
 Description=webos - "%n"
-Requires=ls-hubd.service settings-service.service
-After=ls-hubd.service settings-service.service
+Requires=ls-hubd.service settings-service.service nyx-utils.service
+After=ls-hubd.service settings-service.service nyx-utils.service
 
 [Service]
 Type=oneshot
