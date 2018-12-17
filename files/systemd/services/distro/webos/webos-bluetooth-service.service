@@ -16,8 +16,8 @@
 
 [Unit]
 Description=webos - "%n"
-Requires=ls-hubd.service bluetooth.service
-After=ls-hubd.service bluetooth.service
+Requires=ls-hubd.service bluetooth.service obex.service
+After=ls-hubd.service bluetooth.service obex.service
 
 [Service]
 Type=simple
