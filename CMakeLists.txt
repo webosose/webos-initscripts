@@ -126,6 +126,7 @@ if(${WEBOS_TARGET_DISTRO} STREQUAL "webos")
     set(systemd_distro_units
         files/systemd/services/distro/${WEBOS_TARGET_DISTRO}/avoutputd.service
         files/systemd/services/distro/${WEBOS_TARGET_DISTRO}/db8.service
+        files/systemd/services/distro/${WEBOS_TARGET_DISTRO}/obex.service
         files/systemd/services/distro/${WEBOS_TARGET_DISTRO}/pm-log-daemon.service
         files/systemd/services/distro/${WEBOS_TARGET_DISTRO}/pulseaudio.service
         files/systemd/services/distro/${WEBOS_TARGET_DISTRO}/surface-manager.service

@@ -20,6 +20,7 @@ Wants=audiod.service \
       audiooutputd.service \
       booster.service \
       crashd.service \
+      obex.service \
       pm-log-daemon.service \
       sleepd.service \
       webos-bluetooth-service.service
