@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2018 LG Electronics, Inc.
+# Copyright (c) 2017-2019 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,5 +27,5 @@ OOMScoreAdjust=-500
 EnvironmentFile=-/var/systemd/system/env/second-screen-gateway.env
 ExecStartPre=/bin/mkdir -p /tmp/ssg/userinfo
 ExecStartPre=/bin/mkdir -p /var/preferences/com.webos.service.secondscreen.gateway/userinfo
-ExecStart=-/usr/bin/run-js-service -u -g -k -w -n /usr/palm/services/com.webos.service.secondscreen.gateway
+ExecStart=/usr/bin/run-js-service -u -g -k -n /usr/palm/services/com.webos.service.secondscreen.gateway
 Restart=on-failure
