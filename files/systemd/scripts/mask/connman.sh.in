@@ -26,7 +26,7 @@ if [ -f /usr/share/connman/wired-setup ] ; then
 fi
 
 if [ -f /var/lib/connman/debug-mode ] ; then
-    systemctl set-environment EXTRA_PARAM=" -d"
+    EXTRA_PARAM="-d"
     systemctl set-environment CONNMAN_SUPPLICANT_DEBUG=1
     systemctl set-environment CONNMAN_DHCP_DEBUG=1
     TEST_CONF="/var/lib/connman/custom-main.conf"
@@ -69,3 +69,5 @@ if [ $IS_NFS = "NO" ] ; then
 fi
 
 sysctl -w net.core.rmem_max=524288
+
+/usr/sbin/connmand -n --nobacktrace ${EXTRA_PARAM} --noplugin=bluetooth,bluetooth_legacy

@@ -26,8 +26,7 @@ After=wpa-supplicant.service
 Type=simple
 OOMScoreAdjust=-500
 EnvironmentFile=-/var/systemd/system/env/connman.env
-ExecStartPre=/etc/systemd/system/scripts/connman.sh
-ExecStart=/usr/sbin/connmand -n --nobacktrace ${EXTRA_PARAM} --noplugin=bluetooth,bluetooth_legacy
+ExecStart=/etc/systemd/system/scripts/connman.sh
 # Restart also wpa-supplicant in order to bring back everything into a sane state.
 # This will disconnect any available connection but that will be also the case when
 # connman comes up again and reinitializes everything.
