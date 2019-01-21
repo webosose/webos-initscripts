@@ -1,4 +1,4 @@
-# Copyright (c) 2007-2018 LG Electronics, Inc.
+# Copyright (c) 2007-2019 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -126,7 +126,7 @@ set(systemd_units
 
 if(${WEBOS_TARGET_DISTRO} STREQUAL "webos")
     set(systemd_distro_units
-        files/systemd/services/distro/${WEBOS_TARGET_DISTRO}/avoutputd.service
+        files/systemd/services/distro/${WEBOS_TARGET_DISTRO}/videooutputd.service
         files/systemd/services/distro/${WEBOS_TARGET_DISTRO}/db8.service
         files/systemd/services/distro/${WEBOS_TARGET_DISTRO}/obex.service
         files/systemd/services/distro/${WEBOS_TARGET_DISTRO}/pm-log-daemon.service
