@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2019 LG Electronics, Inc.
+# Copyright (c) 2017-2019 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,16 +16,18 @@
 
 [Unit]
 Description=webos - "%n"
-ConditionPathExists=/tmp/boot-done
-Requires=surface-manager.service
-BindsTo=surface-manager.service
+DefaultDependencies=no
+StartLimitBurst=10
+StartLimitIntervalSec=1
 
 [Service]
-Type=oneshot
-ExecStart=/bin/systemctl stop webapp-mgr.service
-ExecStart=/bin/systemctl start webapp-mgr.service
-ExecStart=/bin/systemctl stop booster.service
-ExecStart=/bin/systemctl start booster.service
-ExecStart=/bin/systemctl stop maliit-server.service
-ExecStart=/bin/systemctl start maliit-server.service
-RemainAfterExit=yes
+Type=notify
+OOMScoreAdjust=-1000
+EnvironmentFile=-/var/systemd/system/env/surface-manager.env
+ExecStartPre=/bin/mkdir -p ${XDG_RUNTIME_DIR}
+ExecStartPre=/bin/chmod 0770 ${XDG_RUNTIME_DIR}
+ExecStartPre=/bin/chown root:compositor ${XDG_RUNTIME_DIR}
+ExecStartPre=-/bin/ln -s ${XDG_RUNTIME_DIR} /var/run/xdg
+ExecStart=/usr/bin/surface-manager.sh
+TimeoutStopSec=5
+Restart=on-failure
