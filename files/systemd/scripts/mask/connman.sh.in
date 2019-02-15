@@ -27,8 +27,8 @@ fi
 
 if [ -f /var/lib/connman/debug-mode ] ; then
     EXTRA_PARAM="-d"
-    systemctl set-environment CONNMAN_SUPPLICANT_DEBUG=1
-    systemctl set-environment CONNMAN_DHCP_DEBUG=1
+    export CONNMAN_SUPPLICANT_DEBUG=1
+    export CONNMAN_DHCP_DEBUG=1
     TEST_CONF="/var/lib/connman/custom-main.conf"
     if [ -f $TEST_CONF ] ; then
          EXTRA_PARAM="$EXTRA_PARAM -c $TEST_CONF"
