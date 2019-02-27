@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2018 LG Electronics, Inc.
+# Copyright (c) 2017-2019 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,12 +18,13 @@
 
 [Unit]
 Description=webos - "%n"
-Wants=mount-readonly-volatile.service
-After=mount-readonly-volatile.service
 
 [Service]
 Type=simple
 OOMScoreAdjust=-500
 EnvironmentFile=-/var/systemd/system/env/crashd.env
+ExecStartPre=/bin/mkdir -p /var/log/crashd
+ExecStartPre=/bin/chown -R root:crashd /var/log/crashd
+ExecStartPre=/bin/chmod -R 770 /var/log/crashd
 ExecStart=/usr/sbin/crashd
 Restart=on-failure
