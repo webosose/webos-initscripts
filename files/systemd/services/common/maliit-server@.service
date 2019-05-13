@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2019 LG Electronics, Inc.
+# Copyright (c) 2019 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,18 +15,16 @@
 # SPDX-License-Identifier: Apache-2.0
 
 [Unit]
-Description=webos - "%n"
-ConditionPathExists=/tmp/lsm-ready
-Requires=ls-hubd.service settings-service.service surface-manager.service
-After=ls-hubd.service settings-service.service surface-manager.service
+Description=webos - "%n", instance %i
+Requires=maliit-server.service
+After=maliit-server.service
+BindsTo=maliit-server.service
 
 [Service]
 Type=simple
-Environment=MALIIT_CONF_PATH=/var/lib/maliit
-Environment=MALIIT_CONF_FILE=/var/lib/maliit/server.conf
-Environment=MALIIT_CONF_FILELOCK=/var/lib/maliit/server.conf.lock
-Environment=MALIIT_CONF_FILETEMP=/var/lib/maliit/server.conf.*
+OOMScoreAdjust=0
+Environment=QT_QPA_PLATFORM=wayland-egl
 EnvironmentFile=-/var/systemd/system/env/maliit-server.env
-ExecStart=/lib/systemd/system/scripts/maliit-server.sh
-RemainAfterExit=yes
-Restart=always
+Environment=LD_PRELOAD=/usr/lib/libsystrim.so.3
+ExecStart=/usr/sbin/MaliitServer -instance %i
+Restart=on-failure
