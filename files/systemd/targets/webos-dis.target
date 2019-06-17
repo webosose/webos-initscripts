@@ -16,10 +16,3 @@
 
 [Unit]
 Description="%n"
-
-# webos
-Wants=configurator-db8.service \
-      db8.service \
-      physical-device-manager.service \
-      settings-service-recovery.service \
-      settings-service.service
