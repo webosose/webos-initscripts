@@ -25,4 +25,5 @@ Type=simple
 OOMScoreAdjust=-500
 EnvironmentFile=-/var/systemd/system/env/booster.env
 ExecStart=/lib/systemd/system/scripts/booster.sh
+SuccessExitStatus=1
 Restart=on-failure
