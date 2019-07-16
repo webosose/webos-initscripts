@@ -32,6 +32,9 @@ add_subdirectory(src/utils)
 webos_configure_source_files(systemd_in_global_env
     files/systemd/environments/30-webos-global.conf)
 
+set(systemd_conf
+    files/systemd/environments/system.conf)
+
 ##### overrides #####
 set(systemd_override
     files/systemd/overrides/)
@@ -74,6 +77,7 @@ webos_configure_source_files(systemd_in_tmpfile
 # install global env files
 install(FILES
     ${systemd_in_global_env}
+    ${systemd_conf}
     DESTINATION ${WEBOS_INSTALL_SYSCONFDIR}/systemd/system.conf.d)
 
 # install override
