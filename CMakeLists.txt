@@ -41,7 +41,6 @@ set(systemd_override
 
 ##### scripts #####
 webos_configure_source_files(systemd_in_scripts
-    files/systemd/scripts/common/configurator-activity.sh
     files/systemd/scripts/configurator-db8.sh
     files/systemd/scripts/connman.sh
     files/systemd/scripts/db8-maindb.sh

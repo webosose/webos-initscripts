@@ -21,16 +21,4 @@ logger -s "Configuring dbkinds & filecache"
 
 # This has to happen *after* the kinds are created.
 logger -s "Configuring dbpermissions"
-
-while [ $SEND_CNT -le 5 ]
-do
-    RES=`/usr/bin/luna-send -n 1 palm://com.palm.configurator/run '{"types":["dbpermissions"]}' | grep -q 'Message status unknown' && echo NG || echo OK` || true
-    if [ "$RES" != "OK" ]; then
-        logger -s "Configuring dbpermissions - error, retrying."
-        usleep 500000
-        SEND_CNT=$((SEND_CNT + 1))
-    else
-        logger -s "Configuring dbpermissions - successful."
-        SEND_CNT=6
-    fi
-done
+/usr/bin/luna-send -n 1 palm://com.palm.configurator/run '{"types":["dbpermissions"]}'
