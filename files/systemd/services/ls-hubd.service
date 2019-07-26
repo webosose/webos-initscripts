@@ -23,6 +23,7 @@ Type=notify
 OOMScoreAdjust=-1000
 EnvironmentFile=-/var/systemd/system/env/ls-hubd.env
 Environment=UPSTART_JOB=ls-hubd
+Environment=LD_PRELOAD=/usr/lib/libsystrim.so.3
 ExecStart=/usr/sbin/ls-hubd --conf /etc/luna-service2/ls-hubd.conf
 TimeoutStopSec=1
 Restart=on-failure

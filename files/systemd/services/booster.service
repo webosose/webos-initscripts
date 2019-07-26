@@ -22,6 +22,6 @@ After=surface-manager.service
 [Service]
 Type=simple
 OOMScoreAdjust=-500
-EnvironmentFile=-/var/systemd/system/env/boosterd.env
+EnvironmentFile=-/var/systemd/system/env/booster.env
 ExecStart=/usr/bin/boosterd
 Restart=on-failure

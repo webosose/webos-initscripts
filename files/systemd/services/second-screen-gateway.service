@@ -22,10 +22,10 @@ Requires=ls-hubd.service settings-service.service
 After=ls-hubd.service settings-service.service
 
 [Service]
-Type=simple
+Type=oneshot
 OOMScoreAdjust=-500
-EnvironmentFile=-/var/systemd/system/env/second-screen-gateway.env
-ExecStartPre=/bin/mkdir -p /tmp/ssg/userinfo
-ExecStartPre=/bin/mkdir -p /var/preferences/com.webos.service.secondscreen.gateway/userinfo
-ExecStart=-/usr/bin/run-js-service -u -g -k -w -n /usr/palm/services/com.webos.service.secondscreen.gateway
-Restart=on-failure
+ExecStart=/bin/rm -rf /tmp/ssg/volatile
+ExecStart=/bin/mkdir -p /tmp/ssg/volatile
+ExecStart=/bin/mkdir -p /tmp/ssg/userinfo
+ExecStart=/bin/mkdir -p /var/preferences/com.webos.service.secondscreen.gateway/userinfo
+RemainAfterExit=yes

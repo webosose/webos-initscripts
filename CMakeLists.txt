@@ -41,6 +41,7 @@ set(systemd_override
 
 ##### scripts #####
 webos_configure_source_files(systemd_in_scripts
+    files/systemd/scripts/common/configurator-activity.sh
     files/systemd/scripts/configurator-db8.sh
     files/systemd/scripts/connman.sh
     files/systemd/scripts/db8-maindb.sh
@@ -55,7 +56,6 @@ webos_configure_source_files(systemd_in_scripts
     files/systemd/scripts/swap-on.sh
     files/systemd/scripts/usbctrl.sh
     files/systemd/scripts/webos-bluetooth-service.sh
-    files/systemd/scripts/wpa-supplicant.sh
     files/systemd/scripts/zram-on.sh)
 
 set(systemd_enable_systemd_environments

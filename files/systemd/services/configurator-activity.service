@@ -23,5 +23,5 @@ BindsTo=activitymanager.service
 [Service]
 Type=oneshot
 ExecStartPre=/usr/bin/logger -s "Configuring activities asynchronously"
-ExecStart=/usr/bin/luna-send -n 1 -f palm://com.palm.configurator/run '{"types":["activities"]}'
+ExecStart=/etc/systemd/system/scripts/configurator-activity.sh
 RemainAfterExit=yes

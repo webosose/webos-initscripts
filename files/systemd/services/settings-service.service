@@ -25,6 +25,7 @@ After=ls-hubd.service db8.service
 Type=notify
 OOMScoreAdjust=-900
 EnvironmentFile=-/var/systemd/system/env/settings-service.env
+Environment=LD_PRELOAD=/usr/lib/libsystrim.so.3
 ExecStart=/etc/systemd/system/scripts/settings-service.sh
 #ExecStartPost=/usr/bin/check_settings_db_health.py &
 Restart=on-failure

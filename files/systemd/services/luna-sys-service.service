@@ -25,5 +25,6 @@ After=ls-hubd.service
 Type=simple
 OOMScoreAdjust=-500
 EnvironmentFile=-/var/systemd/system/env/luna-sys-service.env
+Environment=LD_PRELOAD=/usr/lib/libsystrim.so.3
 ExecStart=/usr/sbin/LunaSysService
 Restart=on-failure
