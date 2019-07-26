@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2019 LG Electronics, Inc.
+# Copyright (c) 2017-2018 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,21 +16,8 @@
 
 [Unit]
 Description=webos - "%n"
-DefaultDependencies=no
-Requires=ls-hubd.service
-After=ls-hubd.service
-StartLimitBurst=10
-StartLimitIntervalSec=1
 
 [Service]
-Type=notify
-OOMScoreAdjust=-1000
-EnvironmentFile=-/var/systemd/system/env/surface-manager.env
-ExecStartPre=/bin/mkdir -p ${XDG_RUNTIME_DIR}
-ExecStartPre=/bin/chmod 0770 ${XDG_RUNTIME_DIR}
-ExecStartPre=/bin/chown root:compositor ${XDG_RUNTIME_DIR}
-ExecStartPre=-/bin/ln -s ${XDG_RUNTIME_DIR} /var/run/xdg
-ExecStart=/usr/bin/surface-manager.sh
-ExecStop=-/bin/rm /tmp/lsm-ready
-TimeoutStopSec=5
-Restart=on-failure
+Type=oneshot
+ExecStart=/lib/systemd/system/scripts/devmode.sh
+RemainAfterExit=yes

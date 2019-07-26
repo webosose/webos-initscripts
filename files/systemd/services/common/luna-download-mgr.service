@@ -14,18 +14,18 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# A userspace service that provides access to the openWebOS database
+# The Download Manager Service
 
 [Unit]
 Description=webos - "%n"
-Requires=ls-hubd.service db8-pre-config.service
-After=ls-hubd.service db8-pre-config.service
+Requires=ls-hubd.service
+After=ls-hubd.service
 
 [Service]
 Type=simple
-OOMScoreAdjust=-900
-EnvironmentFile=-/var/systemd/system/env/db8-maindb.env
-Environment=LD_PRELOAD=/usr/lib/libjemalloc_mt.so.0:/lib/libpthread.so.0
-ExecStartPre=/etc/systemd/system/scripts/db8-maindb.sh
-ExecStart=/usr/sbin/mojodb-luna -c /etc/palm/db8/maindb.conf
+OOMScoreAdjust=-500
+EnvironmentFile=-/var/systemd/system/env/luna-download-mgr.env
+Environment=CHARSET=UTF-8
+ExecStartPre=/lib/systemd/system/scripts/luna-download-mgr.sh
+ExecStart=/usr/bin/LunaDownloadMgr
 Restart=on-failure

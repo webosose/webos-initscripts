@@ -16,10 +16,12 @@
 
 [Unit]
 Description=webos - "%n"
-#Requires=mountall
-#After=mountall
+Requires=surface-manager.service configd.service
+After=surface-manager.service configd.service
 
 [Service]
-Type=oneshot
-ExecStart=/etc/systemd/system/scripts/populate-volatile.sh
-RemainAfterExit=yes
+Type=simple
+OOMScoreAdjust=-500
+EnvironmentFile=-/var/systemd/system/env/booster.env
+ExecStart=/lib/systemd/system/scripts/booster.sh
+Restart=on-failure

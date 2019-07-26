@@ -14,13 +14,14 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# enable zram configuration
-
 [Unit]
 Description=webos - "%n"
-ConditionHost=!qemux86
+Requires=ls-hubd.service bluetooth.service obex.service
+After=ls-hubd.service bluetooth.service obex.service
 
 [Service]
-Type=oneshot
-ExecStart=/etc/systemd/system/scripts/zram-on.sh
-RemainAfterExit=yes
+Type=simple
+EnvironmentFile=-/var/systemd/system/env/webos-bluetooth-service.env
+ExecStartPre=/lib/systemd/system/scripts/webos-bluetooth-service.sh
+ExecStart=/usr/sbin/webos-bluetooth-service
+Restart=on-failure

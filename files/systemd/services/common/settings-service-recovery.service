@@ -14,11 +14,17 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+# Settings Service Recovery for Platform settings
+# This upstart script only create /tmp/settingsservice_ready file
+# ONLY if it receives settingsservice-ready event.
+
 [Unit]
 Description=webos - "%n"
+Requires=settings-service.service
+After=settings-service.service
 
 [Service]
-Type=simple
-OOMScoreAdjust=-500
-ExecStart=/bin/sh -euc 'if test -x /usr/sbin/alsactl -a -f /var/lib/alsa/asound.state -a "`cat /var/lib/alsa/asound.state | wc -l`" -gt 1; then /usr/sbin/alsactl -f /var/lib/alsa/asound.state restore; fi; exec /usr/bin/pulseaudio --system --resample-method=ffmpeg'
-Restart=on-failure
+Type=oneshot
+ExecStart=/bin/sh -euc 'echo "settingsservice_ready" > /tmp/settingsservice_ready'
+ExecStart=/bin/sh -euc 'if [ -f /usr/bin/recover_hdr_psm.sh ]; then /usr/bin/recover_hdr_psm.sh || true; fi;'
+RemainAfterExit=no

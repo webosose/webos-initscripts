@@ -30,5 +30,5 @@ Environment=MALIIT_CONF_FILE=/var/lib/maliit/server.conf
 Environment=MALIIT_CONF_FILELOCK=/var/lib/maliit/server.conf.lock
 Environment=MALIIT_CONF_FILETEMP=/var/lib/maliit/server.conf.*
 EnvironmentFile=-/var/systemd/system/env/maliit-server.env
-ExecStart=/etc/systemd/system/scripts/maliit-server.sh
+ExecStart=/lib/systemd/system/scripts/maliit-server.sh
 Restart=always

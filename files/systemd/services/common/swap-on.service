@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2018 LG Electronics, Inc.
+# Copyright (c) 2018 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,19 +14,15 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# The Open webOS logging daemon implementation
+# enable swap memory
 
 [Unit]
 Description=webos - "%n"
-Requires=ls-hubd.service
-After=ls-hubd.service
+ConditionHost=!qemux86
+Wants=zram-on.service
+After=zram-on.service
 
 [Service]
-Type=simple
-OOMScoreAdjust=-1000
-EnvironmentFile=-/var/systemd/system/env/pm-log-daemon.env
-ExecStartPre=-/bin/mkdir -p /tmp/pmlogdaemon
-ExecStart=/usr/sbin/PmLogDaemon -z -f 6 -m
-ExecStartPost=/bin/touch /tmp/pmlogdaemon/hub-ready
-ExecStop=/etc/systemd/system/scripts/pm-log-daemon-stop.sh
-Restart=on-failure
+Type=oneshot
+ExecStart=/lib/systemd/system/scripts/swap-on.sh
+RemainAfterExit=yes

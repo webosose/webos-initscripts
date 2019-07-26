@@ -14,12 +14,14 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# job to setup jail subdirectories
+# Creates the database schema for webos Applications.
 
 [Unit]
 Description=webos - "%n"
+Requires=ls-hubd.service db8.service
+After=ls-hubd.service db8.service
 
 [Service]
 Type=oneshot
-ExecStart=/etc/systemd/system/scripts/jail.sh
+ExecStart=/lib/systemd/system/scripts/configurator-db8.sh
 RemainAfterExit=yes

@@ -16,10 +16,10 @@
 
 [Unit]
 Description=webos - "%n"
-Requires=db8-maindb.service db8-mediadb.service db8-tempdb.service
-After=db8-maindb.service db8-mediadb.service db8-tempdb.service
+#Requires=mountall
+#After=mountall
 
 [Service]
 Type=oneshot
-ExecStart=/bin/true
+ExecStart=/lib/systemd/system/scripts/populate-volatile.sh
 RemainAfterExit=yes

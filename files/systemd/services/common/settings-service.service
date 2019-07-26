@@ -14,19 +14,18 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# A userspace service that provides access to the openWebOS database
+# Settings Service for Platform settings
 
 [Unit]
 Description=webos - "%n"
-Requires=ls-hubd.service db8-pre-config.service
-After=ls-hubd.service db8-pre-config.service
+Requires=ls-hubd.service db8.service
+After=ls-hubd.service db8.service
 
 [Service]
-Type=simple
+Type=notify
 OOMScoreAdjust=-900
-EnvironmentFile=-/var/systemd/system/env/db8-mediadb.env
-Environment=LD_PRELOAD=/usr/lib/libjemalloc_mt.so.0:/lib/libpthread.so.0
-ExecStartPre=/usr/sbin/mojodb_migrate /etc/palm/db8/mediadb.conf
-ExecStart=/usr/sbin/mojodb-luna -c /etc/palm/db8/mediadb.conf
+EnvironmentFile=-/var/systemd/system/env/settings-service.env
+Environment=LD_PRELOAD=/usr/lib/libsystrim.so.3
+ExecStart=/lib/systemd/system/scripts/settings-service.sh
+#ExecStartPost=/usr/bin/check_settings_db_health.py &
 Restart=on-failure
-

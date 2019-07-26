@@ -14,14 +14,12 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+# job to setup jail subdirectories
+
 [Unit]
 Description=webos - "%n"
-Requires=surface-manager.service
-After=surface-manager.service
 
 [Service]
-Type=simple
-OOMScoreAdjust=-500
-EnvironmentFile=-/var/systemd/system/env/booster.env
-ExecStart=/etc/systemd/system/scripts/booster.sh
-Restart=on-failure
+Type=oneshot
+ExecStart=/lib/systemd/system/scripts/jail.sh
+RemainAfterExit=yes
