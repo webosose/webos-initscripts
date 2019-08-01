@@ -25,8 +25,10 @@ webos_component(3 0 0)
 webos_distro_dep()
 webos_distro_variant_dep()
 
-add_subdirectory(src/initctl)
-add_subdirectory(src/utils)
+if(${WEBOS_TARGET_DISTRO} STREQUAL "webos")
+    add_subdirectory(src/initctl)
+    add_subdirectory(src/utils)
+endif()
 
 ##### environments #####
 webos_configure_source_files(systemd_in_global_env
