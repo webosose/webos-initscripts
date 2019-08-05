@@ -18,6 +18,8 @@
 
 [Unit]
 Description=webos - "%n"
+Wants=mount-readonly-volatile.service
+After=mount-readonly-volatile.service
 
 [Service]
 Type=simple

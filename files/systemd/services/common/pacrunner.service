@@ -16,8 +16,8 @@
 
 [Unit]
 Description=webos - "%n"
-Requires=connman.service
-After=connman.service
+Wants=wpa-supplicant.service
+After=wpa-supplicant.service
 
 [Service]
 Type=simple
