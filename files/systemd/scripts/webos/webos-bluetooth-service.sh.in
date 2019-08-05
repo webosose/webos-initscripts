@@ -16,6 +16,9 @@
 # SPDX-License-Identifier: Apache-2.0
 
 if [ -e /var/lib/bluetooth/debug-mode ] ; then
-        PmLogCtl def webos-bluetooth-service debug
-        PmLogCtl def bluetooth-sil-@WEBOS_BLUETOOTH_SIL@ debug
+    PmLogCtl def webos-bluetooth-service debug
+    # TODO : Need to change the "bluez5" to "@WEBOS_BLUETOOTH_SIL@"
+    # The "@WEBOS_BLUETOOTH_SIL@" comes from webos-bluetooth-service.bb file
+    # So this script uses 'bluez5' instead of "@WEBOS_BLUETOOTH_SIL@" temporarily.
+    PmLogCtl def bluetooth-sil-bluez5 debug
 fi

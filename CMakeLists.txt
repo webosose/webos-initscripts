@@ -47,6 +47,12 @@ set(systemd_common_override
     files/systemd/overrides/common/webos-mbd.target.wants
     files/systemd/overrides/common/webos-rbd.target.wants)
 
+if(${WEBOS_TARGET_DISTRO} STREQUAL "webos")
+    set(systemd_distro_override
+        files/systemd/overrides/${WEBOS_TARGET_DISTRO}/default-webos.target.wants
+        files/systemd/overrides/${WEBOS_TARGET_DISTRO}/webos-cbd.target.wants)
+endif()
+
 ##### scripts #####
 webos_configure_source_files(systemd_common_in_scripts
     files/systemd/scripts/common/booster.sh
@@ -55,14 +61,18 @@ webos_configure_source_files(systemd_common_in_scripts
     files/systemd/scripts/common/jail.sh
     files/systemd/scripts/common/luna-download-mgr.sh
     files/systemd/scripts/common/maliit-server.sh
-    files/systemd/scripts/common/pm-log-daemon-stop.sh
     files/systemd/scripts/common/populate-volatile.sh
     files/systemd/scripts/common/sam.sh
-    files/systemd/scripts/common/settings-service.sh
-    files/systemd/scripts/common/swap-on.sh
-    files/systemd/scripts/common/usbctrl.sh
-    files/systemd/scripts/common/webos-bluetooth-service.sh
-    files/systemd/scripts/common/zram-on.sh)
+    files/systemd/scripts/common/settings-service.sh)
+
+if(${WEBOS_TARGET_DISTRO} STREQUAL "webos")
+    webos_configure_source_files(systemd_distro_in_scripts
+        files/systemd/scripts/${WEBOS_TARGET_DISTRO}/pm-log-daemon-stop.sh
+        files/systemd/scripts/${WEBOS_TARGET_DISTRO}/swap-on.sh
+        files/systemd/scripts/${WEBOS_TARGET_DISTRO}/usbctrl.sh
+        files/systemd/scripts/${WEBOS_TARGET_DISTRO}/webos-bluetooth-service.sh
+        files/systemd/scripts/${WEBOS_TARGET_DISTRO}/zram-on.sh)
+endif()
 
 set(systemd_enable_systemd_environments
     files/systemd/scripts/common/get-systemd-environments.sh)
@@ -70,6 +80,11 @@ set(systemd_enable_systemd_environments
 ##### services #####
 set(systemd_common_service_units
     files/systemd/services/common/)
+
+if(${WEBOS_TARGET_DISTRO} STREQUAL "webos")
+    set(systemd_distro_service_units
+        files/systemd/services/${WEBOS_TARGET_DISTRO}/)
+endif()
 
 set(systemd_mask_service_units
     files/systemd/services/mask/)
@@ -117,15 +132,18 @@ install(DIRECTORY
 # install overrides (target wants)
 install(DIRECTORY
     ${systemd_common_override}
+    ${systemd_distro_override}
     DESTINATION ${WEBOS_INSTALL_BASE_LIBDIR}/systemd/system)
 
 # install scripts
 install(PROGRAMS
     ${systemd_common_in_scripts}
+    ${systemd_distro_in_scripts}
     DESTINATION ${WEBOS_INSTALL_BASE_LIBDIR}/systemd/system/scripts)
 
 # install systemd units
 install(DIRECTORY
     ${systemd_common_service_units}
+    ${systemd_distro_service_units}
     ${systemd_common_target_units}
     DESTINATION ${WEBOS_INSTALL_BASE_LIBDIR}/systemd/system)
