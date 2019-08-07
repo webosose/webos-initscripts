@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2018 LG Electronics, Inc.
+# Copyright (c) 2017-2019 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,5 +30,5 @@ ExecStart=/etc/systemd/system/scripts/connman.sh
 # Restart also wpa-supplicant in order to bring back everything into a sane state.
 # This will disconnect any available connection but that will be also the case when
 # connman comes up again and reinitializes everything.
-ExecStop=-/usr/sbin/wpa_cli terminate
+ExecStopPost=-/usr/sbin/wpa_cli terminate
 Restart=on-failure

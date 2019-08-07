@@ -70,4 +70,4 @@ fi
 
 sysctl -w net.core.rmem_max=524288
 
-/usr/sbin/connmand -n --nobacktrace ${EXTRA_PARAM} --noplugin=bluetooth,bluetooth_legacy
+exec /usr/sbin/connmand -n --nobacktrace ${EXTRA_PARAM} --noplugin=bluetooth,bluetooth_legacy
