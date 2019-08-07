@@ -64,9 +64,6 @@ webos_configure_source_files(systemd_common_in_scripts
     files/systemd/scripts/common/webos-bluetooth-service.sh
     files/systemd/scripts/common/zram-on.sh)
 
-webos_configure_source_files(systemd_mask_in_scripts
-    files/systemd/scripts/mask/connman.sh)
-
 set(systemd_enable_systemd_environments
     files/systemd/scripts/common/get-systemd-environments.sh)
 
@@ -108,10 +105,6 @@ install(FILES
     DESTINATION ${WEBOS_INSTALL_SYSCONFDIR}/tmpfiles.d)
 
 # Masking and Override systemd module
-install(PROGRAMS
-    ${systemd_mask_in_scripts}
-    DESTINATION ${WEBOS_INSTALL_SYSCONFDIR}/systemd/system/scripts)
-
 install(DIRECTORY
     ${systemd_mask_service_units}
     DESTINATION ${WEBOS_INSTALL_SYSCONFDIR}/systemd/system)
