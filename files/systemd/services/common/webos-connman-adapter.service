@@ -14,8 +14,17 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-#Type    Path                        Mode    UID    GID   Age   Argument
-d        /var/preferences            777     root   -
-d        /var/home/root              -       -      -
-d        /var/tmp                    -       -      -
-d        /var/file-cache             -       -      -
+# Open webOS component for managing network connections using connman
+
+[Unit]
+Description=webos - "%n"
+Requires=ls-hubd.service
+Wants=connman.service
+After=ls-hubd.service connman.service
+
+[Service]
+Type=simple
+OOMScoreAdjust=-500
+EnvironmentFile=-/var/systemd/system/env/webos-connman-adapter.env
+ExecStart=/usr/sbin/webos-connman-adapter
+Restart=on-failure

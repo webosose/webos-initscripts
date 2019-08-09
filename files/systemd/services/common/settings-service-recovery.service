@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2019 LG Electronics, Inc.
+# Copyright (c) 2017-2018 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,8 +14,17 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-#Type    Path                        Mode    UID    GID   Age   Argument
-d        /var/preferences            777     root   -
-d        /var/home/root              -       -      -
-d        /var/tmp                    -       -      -
-d        /var/file-cache             -       -      -
+# Settings Service Recovery for Platform settings
+# This upstart script only create /tmp/settingsservice_ready file
+# ONLY if it receives settingsservice-ready event.
+
+[Unit]
+Description=webos - "%n"
+Requires=settings-service.service
+After=settings-service.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -euc 'echo "settingsservice_ready" > /tmp/settingsservice_ready'
+ExecStart=/bin/sh -euc 'if [ -f /usr/bin/recover_hdr_psm.sh ]; then /usr/bin/recover_hdr_psm.sh || true; fi;'
+RemainAfterExit=no

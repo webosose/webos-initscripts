@@ -1,4 +1,5 @@
-# Copyright (c) 2017-2019 LG Electronics, Inc.
+#!/bin/sh
+# Copyright (c) 2018 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,10 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-#Type    Path                        Mode    UID    GID   Age   Argument
-d        /var/preferences            777     root   -
-d        /var/home/root              -       -      -
-d        /var/tmp                    -       -      -
-d        /var/file-cache             -       -      -
+if [ -e /var/lib/bluetooth/debug-mode ] ; then
+    PmLogCtl def webos-bluetooth-service debug
+    # TODO : Need to change the "bluez5" to "@WEBOS_BLUETOOTH_SIL@"
+    # The "@WEBOS_BLUETOOTH_SIL@" comes from webos-bluetooth-service.bb file
+    # So this script uses 'bluez5' instead of "@WEBOS_BLUETOOTH_SIL@" temporarily.
+    PmLogCtl def bluetooth-sil-bluez5 debug
+fi

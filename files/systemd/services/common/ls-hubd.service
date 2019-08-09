@@ -14,8 +14,17 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-#Type    Path                        Mode    UID    GID   Age   Argument
-d        /var/preferences            777     root   -
-d        /var/home/root              -       -      -
-d        /var/tmp                    -       -      -
-d        /var/file-cache             -       -      -
+[Unit]
+Description=webos - "%n"
+DefaultDependencies=no
+
+[Service]
+Type=notify
+OOMScoreAdjust=-1000
+EnvironmentFile=-/var/systemd/system/env/ls-hubd.env
+Environment=UPSTART_JOB=ls-hubd
+Environment=LD_PRELOAD=/usr/lib/libsystrim.so.3
+ExecStart=/usr/sbin/ls-hubd --conf /etc/luna-service2/ls-hubd.conf
+TimeoutStopSec=1
+Restart=on-failure
+StartLimitAction=reboot

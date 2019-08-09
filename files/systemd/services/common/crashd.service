@@ -14,8 +14,17 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-#Type    Path                        Mode    UID    GID   Age   Argument
-d        /var/preferences            777     root   -
-d        /var/home/root              -       -      -
-d        /var/tmp                    -       -      -
-d        /var/file-cache             -       -      -
+# crashd and libSegFault implementation for crash report generation
+
+[Unit]
+Description=webos - "%n"
+
+[Service]
+Type=simple
+OOMScoreAdjust=-500
+EnvironmentFile=-/var/systemd/system/env/crashd.env
+ExecStartPre=/bin/mkdir -p /var/log/crashd
+ExecStartPre=/bin/chown -R root:crashd /var/log/crashd
+ExecStartPre=/bin/chmod -R 770 /var/log/crashd
+ExecStart=/usr/sbin/crashd
+Restart=on-failure

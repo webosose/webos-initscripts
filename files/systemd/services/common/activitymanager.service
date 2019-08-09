@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2019 LG Electronics, Inc.
+# Copyright (c) 2017-2018 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,8 +14,18 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-#Type    Path                        Mode    UID    GID   Age   Argument
-d        /var/preferences            777     root   -
-d        /var/home/root              -       -      -
-d        /var/tmp                    -       -      -
-d        /var/file-cache             -       -      -
+# Open webOS component to manage all running activities.
+
+[Unit]
+Description=webos - "%n"
+Requires=ls-hubd.service configurator-db8.service
+After=ls-hubd.service configurator-db8.service
+Wants=configurator-activity.service
+Before=configurator-activity.service
+
+[Service]
+Type=notify
+OOMScoreAdjust=-500
+EnvironmentFile=-/var/systemd/system/env/activitymanager.env
+ExecStart=/usr/sbin/activitymanager -c {\"log\":{\"appender\":{\"type\":\"syslog\"},\"levels\":{\"default\":\"notice\"}}}
+Restart=on-failure

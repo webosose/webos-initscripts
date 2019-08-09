@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2019 LG Electronics, Inc.
+# Copyright (c) 2017-2018 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,8 +14,18 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-#Type    Path                        Mode    UID    GID   Age   Argument
-d        /var/preferences            777     root   -
-d        /var/home/root              -       -      -
-d        /var/tmp                    -       -      -
-d        /var/file-cache             -       -      -
+# Settings Service for Platform settings
+
+[Unit]
+Description=webos - "%n"
+Requires=ls-hubd.service db8.service
+After=ls-hubd.service db8.service
+
+[Service]
+Type=notify
+OOMScoreAdjust=-900
+EnvironmentFile=-/var/systemd/system/env/settings-service.env
+Environment=LD_PRELOAD=/usr/lib/libsystrim.so.3
+ExecStart=/lib/systemd/system/scripts/settings-service.sh
+#ExecStartPost=/usr/bin/check_settings_db_health.py &
+Restart=on-failure

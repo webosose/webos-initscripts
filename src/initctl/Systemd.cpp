@@ -25,7 +25,7 @@
 #include "Util.h"
 #include "Logger.h"
 
-const std::string Systemd::SYSTEMD_CONFIG_PATH = "/etc/systemd/system/";
+const std::string Systemd::SYSTEMD_CONFIG_PATH = "/lib/systemd/system/";
 
 Systemd::Systemd() {
   m_state = "READY=1\n"

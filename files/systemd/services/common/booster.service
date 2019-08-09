@@ -14,8 +14,16 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-#Type    Path                        Mode    UID    GID   Age   Argument
-d        /var/preferences            777     root   -
-d        /var/home/root              -       -      -
-d        /var/tmp                    -       -      -
-d        /var/file-cache             -       -      -
+[Unit]
+Description=webos - "%n"
+ConditionPathExists=/tmp/lsm-ready
+Requires=surface-manager.service configd.service
+After=surface-manager.service configd.service
+
+[Service]
+Type=simple
+OOMScoreAdjust=-500
+EnvironmentFile=-/var/systemd/system/env/booster.env
+ExecStart=/lib/systemd/system/scripts/booster.sh
+SuccessExitStatus=1
+Restart=on-failure

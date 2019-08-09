@@ -14,8 +14,19 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-#Type    Path                        Mode    UID    GID   Age   Argument
-d        /var/preferences            777     root   -
-d        /var/home/root              -       -      -
-d        /var/tmp                    -       -      -
-d        /var/file-cache             -       -      -
+# configd is a new service in the webOS platform that allows components query for dynamic configuration
+
+[Unit]
+Description=webos - "%n"
+DefaultDependencies=no
+Requires=ls-hubd.service
+After=ls-hubd.service
+
+[Service]
+Type=simple
+OOMScoreAdjust=-1000
+EnvironmentFile=-/var/systemd/system/env/configd.env
+Environment=WEBOS_TARGET_DISTRO_VARIANT=normal
+Environment=LD_PRELOAD=/usr/lib/libsystrim.so.3
+ExecStart=/usr/sbin/configd
+Restart=on-failure

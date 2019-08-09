@@ -14,8 +14,17 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-#Type    Path                        Mode    UID    GID   Age   Argument
-d        /var/preferences            777     root   -
-d        /var/home/root              -       -      -
-d        /var/tmp                    -       -      -
-d        /var/file-cache             -       -      -
+[Unit]
+Description=webos - "%n"
+Requires=ls-hubd.service sam.service mount-readwrite.service
+After=ls-hubd.service sam.service mount-readwrite.service
+
+[Service]
+Type=simple
+Nice=-20
+OOMScoreAdjust=-1000
+EnvironmentFile=-/var/systemd/system/env/bootd.env
+ExecStartPre=/sbin/sysctl -w kernel.randomize_va_space=2
+ExecStart=/usr/sbin/bootd
+Restart=on-failure
+StartLimitAction=reboot

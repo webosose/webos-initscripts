@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2019 LG Electronics, Inc.
+# Copyright (c) 2018 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,8 +14,15 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-#Type    Path                        Mode    UID    GID   Age   Argument
-d        /var/preferences            777     root   -
-d        /var/home/root              -       -      -
-d        /var/tmp                    -       -      -
-d        /var/file-cache             -       -      -
+# enable swap memory
+
+[Unit]
+Description=webos - "%n"
+ConditionHost=!qemux86
+Wants=zram-on.service
+After=zram-on.service
+
+[Service]
+Type=oneshot
+ExecStart=/lib/systemd/system/scripts/swap-on.sh
+RemainAfterExit=yes
