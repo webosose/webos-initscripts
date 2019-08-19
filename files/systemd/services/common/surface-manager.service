@@ -18,7 +18,8 @@
 Description=webos - "%n"
 DefaultDependencies=no
 Requires=ls-hubd.service
-After=ls-hubd.service
+Wants=configd.service
+After=ls-hubd.service configd.service
 
 [Service]
 Type=oneshot
