@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (c) 2017-2018 LG Electronics, Inc.
+# Copyright (c) 2017-2019 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,8 +40,16 @@ then
     echo "libplugin-japanese.so:japanese" >> $MALIIT_CONF_FILE
 fi
 
-export LD_PRELOAD=/usr/lib/libsystrim.so.3
-/usr/sbin/MaliitServer
+# Get the display count from the number of elements in
+# com.webos.surfacemanager.compositorExtraWindows array
+DISPLAY_COUNT=`luna-send -n 1 luna://com.webos.service.config/getConfigs '{"configNames":["com.webos.surfacemanager.compositorExtraWindows"]}' | grep -oE '\[\{.*\}\]' | grep -o '{' | wc -l`
+# Add 1 for the primary display.
+DISPLAY_COUNT=$((DISPLAY_COUNT + 1))
+
+# Start maliit-server.service instance by the display count
+for i in `seq $DISPLAY_COUNT` ; do
+    systemctl start maliit-server@$(($i - 1))
+done
 
 if [ -z "$WAYLAND_DISPLAY" ]; then
     WAYLAND_DISPLAY="wayland-0"
