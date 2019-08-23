@@ -64,7 +64,7 @@ if [ -d $ZRAM_PATH ]; then
         BASE_FREE=1536
         # get pagesize
         MAPPED_SIZE=`cat /proc/meminfo | grep Mapped | awk '{print $2}'`
-        MAPPED_COUNT=`cat /proc/vmstat | grep mapped | awk '{print $2}'`
+        MAPPED_COUNT=`cat /proc/vmstat | grep nr_mapped | awk '{print $2}'`
         PAGE_SIZE=$(($MAPPED_SIZE*1024/$MAPPED_COUNT))
 
         # get total free
