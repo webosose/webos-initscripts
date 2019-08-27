@@ -16,8 +16,9 @@
 
 [Unit]
 Description=webos - "%n"
-Requires=ls-hubd.service sam.service mount-readwrite.service
-After=ls-hubd.service sam.service mount-readwrite.service
+Requires=ls-hubd.service
+Wants=sam.service
+After=ls-hubd.service sam.service
 
 [Service]
 Type=simple
