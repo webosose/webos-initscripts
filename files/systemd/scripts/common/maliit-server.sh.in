@@ -40,14 +40,11 @@ then
     echo "libplugin-japanese.so:japanese" >> $MALIIT_CONF_FILE
 fi
 
-# Get the display count from the number of elements in
-# com.webos.surfacemanager.compositorExtraWindows array
-DISPLAY_COUNT=`luna-send -n 1 luna://com.webos.service.config/getConfigs '{"configNames":["com.webos.surfacemanager.compositorExtraWindows"]}' | grep -oE '\[\{.*\}\]' | grep -o '{' | wc -l`
-# Add 1 for the primary display.
-DISPLAY_COUNT=$((DISPLAY_COUNT + 1))
-
+# Get the display count (use 1 if unavailable or invalid)
 # Start maliit-server.service instance by the display count
-for i in `seq $DISPLAY_COUNT` ; do
+c="$(cat $XDG_RUNTIME_DIR/surface-manager.windowcount 2>/dev/null)"
+[ "$c" -eq "$c" 2>/dev/null ] || c=1
+for i in $(seq $c) ; do
     systemctl start maliit-server@$(($i - 1))
 done
 
