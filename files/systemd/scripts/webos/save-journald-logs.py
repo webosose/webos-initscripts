@@ -26,17 +26,20 @@ def flush_journald_log_to_file():
     journalctl_options = ['-a']
     command = ['journalctl'] + journalctl_options
     log_file_name = "/var/log/journald-" + get_timestamp() + ".log"
-    with open(log_file_name, "w") as logfile:
-        call(command, stdout=logfile)
+    with open(log_file_name, "w") as logFile:
+        call(command, stdout=logFile)
     return
 
 def backup_var_log():
-    logfile = '/var/spool/rdxd/previous_boot_logs.tar.gz'
-    if os.path.isfile(logfile):
-        os.remove(logfile)
-    
+    rdxdDir = "/var/spool/rdxd/"
+    if not os.path.isdir(rdxdDir):
+        os.mkdir(rdxdDir)
+    saveFile = '/var/spool/rdxd/previous_boot_logs.tar.gz'
+    if os.path.isfile(saveFile):
+        os.remove(saveFile)
+
     source = '/var/log/'
-    with tarfile.open(logfile, "w:gz") as tar:
+    with tarfile.open(saveFile, "w:gz") as tar:
         tar.add(source, arcname='log')
     return
 
