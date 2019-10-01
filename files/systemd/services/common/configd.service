@@ -27,6 +27,5 @@ Type=simple
 OOMScoreAdjust=-1000
 EnvironmentFile=-/var/systemd/system/env/configd.env
 Environment=WEBOS_TARGET_DISTRO_VARIANT=normal
-Environment=LD_PRELOAD=/usr/lib/libsystrim.so.3
 ExecStart=/usr/sbin/configd
 Restart=on-failure

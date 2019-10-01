@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2018 LG Electronics, Inc.
+# Copyright (c) 2017-2019 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ After=ls-hubd.service surface-manager.service
 Type=simple
 OOMScoreAdjust=-1000
 EnvironmentFile=-/var/systemd/system/env/sam.env
-Environment=LD_PRELOAD=/usr/lib/libsystrim.so.3
 ExecStartPre=/lib/systemd/system/scripts/sam.sh
 ExecStart=/usr/sbin/sam
 Restart=on-failure
