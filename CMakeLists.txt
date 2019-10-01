@@ -51,7 +51,7 @@ set(systemd_common_override
 
 if(${WEBOS_TARGET_DISTRO} STREQUAL "webos")
     set(systemd_distro_override
-        files/systemd/overrides/${WEBOS_TARGET_DISTRO}/multi-user.target.wants
+        files/systemd/overrides/${WEBOS_TARGET_DISTRO}/default-webos.target.wants
         files/systemd/overrides/${WEBOS_TARGET_DISTRO}/webos-cbd.target.wants)
 endif()
 
@@ -69,6 +69,7 @@ webos_configure_source_files(systemd_common_in_scripts
 
 if(${WEBOS_TARGET_DISTRO} STREQUAL "webos")
     webos_configure_source_files(systemd_distro_in_scripts
+        files/systemd/scripts/${WEBOS_TARGET_DISTRO}/pm-log-daemon-stop.sh
         files/systemd/scripts/${WEBOS_TARGET_DISTRO}/swap-on.sh
         files/systemd/scripts/${WEBOS_TARGET_DISTRO}/usbctrl.sh
         files/systemd/scripts/${WEBOS_TARGET_DISTRO}/webos-bluetooth-service.sh
@@ -77,11 +78,6 @@ endif()
 
 set(systemd_enable_systemd_environments
     files/systemd/scripts/common/get-systemd-environments.sh)
-
-if(${WEBOS_TARGET_DISTRO} STREQUAL "webos")
-    set(journald_log_handle_script
-        files/systemd/scripts/${WEBOS_TARGET_DISTRO}/save-journald-logs.py)
-endif()
 
 ##### services #####
 set(systemd_common_service_units
@@ -145,7 +141,6 @@ install(DIRECTORY
 install(PROGRAMS
     ${systemd_common_in_scripts}
     ${systemd_distro_in_scripts}
-    ${journald_log_handle_script}
     DESTINATION ${WEBOS_INSTALL_BASE_LIBDIR}/systemd/system/scripts)
 
 # install systemd units
