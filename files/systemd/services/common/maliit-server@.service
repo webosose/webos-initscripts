@@ -25,6 +25,5 @@ Type=simple
 OOMScoreAdjust=0
 Environment=QT_QPA_PLATFORM=wayland-egl
 EnvironmentFile=-/var/systemd/system/env/maliit-server.env
-Environment=LD_PRELOAD=/usr/lib/libsystrim.so.3
 ExecStart=/usr/sbin/MaliitServer -instance %i
 Restart=on-failure
