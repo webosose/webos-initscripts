@@ -52,6 +52,7 @@ set(systemd_common_override
 if(${WEBOS_TARGET_DISTRO} STREQUAL "webos")
     set(systemd_distro_override
         files/systemd/overrides/${WEBOS_TARGET_DISTRO}/multi-user.target.wants
+        files/systemd/overrides/${WEBOS_TARGET_DISTRO}/webos-bd.target.wants
         files/systemd/overrides/${WEBOS_TARGET_DISTRO}/webos-cbd.target.wants)
 endif()
 
