@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2019 LG Electronics, Inc.
+# Copyright (c) 2018 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 [Unit]
 Description=webos - "%n"
-Requires=ls-hubd.service bluetooth.service
-After=ls-hubd.service bluetooth.service
+Requires=ls-hubd.service bluetooth.service obex.service
+After=ls-hubd.service bluetooth.service obex.service
 
 [Service]
 Type=simple
