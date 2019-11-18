@@ -12,6 +12,7 @@
 # LICENSE@@@
 
 import os
+import glob
 import tarfile
 import time
 
@@ -21,6 +22,11 @@ def get_timestamp():
     t = time.localtime()
     return str(t.tm_year).zfill(4) + "-" + str(t.tm_mon).zfill(2) + "-" + str(t.tm_mday).zfill(2) + "-" + str(
         t.tm_hour).zfill(2) + "-" + str(t.tm_min).zfill(2) + "-" + str(t.tm_sec).zfill(2)
+
+def remove_journald_old_files():
+    filelist = glob.glob("/var/log/journald*")
+    for f in filelist:
+        os.remove(f)
 
 def flush_journald_log_to_file():
     journalctl_options = ['-a']
@@ -44,6 +50,7 @@ def backup_var_log():
     return
 
 if __name__ == '__main__':
+    remove_journald_old_files()
     flush_journald_log_to_file()
     backup_var_log()
 
