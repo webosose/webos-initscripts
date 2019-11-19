@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2018 LG Electronics, Inc.
+# Copyright (c) 2017-2019 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -52,6 +52,7 @@ DefaultEnvironment=QT_WAYLAND_XKB_RULE_NAMES=evdev:lgwebostv:us::
 DefaultEnvironment=WEBOS_GL_DISABLE_THREADED_RENDERING=1
 DefaultEnvironment=XDG_DIR=/tmp/xdg
 DefaultEnvironment=XDG_RUNTIME_DIR=/tmp/xdg
+DefaultEnvironment=XDG_CACHE_HOME=/var/cache/xdg
 
 # ROS2 settings
 DefaultEnvironment=AMENT_PREFIX_PATH=/usr
