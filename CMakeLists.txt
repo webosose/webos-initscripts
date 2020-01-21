@@ -1,4 +1,4 @@
-# Copyright (c) 2007-2019 LG Electronics, Inc.
+# Copyright (c) 2007-2020 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -58,7 +58,6 @@ endif()
 
 ##### scripts #####
 webos_configure_source_files(systemd_common_in_scripts
-    files/systemd/scripts/common/booster.sh
     files/systemd/scripts/common/configurator-db8.sh
     files/systemd/scripts/common/devmode.sh
     files/systemd/scripts/common/jail.sh
