@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2019 LG Electronics, Inc.
+# Copyright (c) 2018-2020 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,8 +24,6 @@ BindsTo=surface-manager.service
 Type=oneshot
 ExecStart=/bin/systemctl stop webapp-mgr.service
 ExecStart=/bin/systemctl start webapp-mgr.service
-ExecStart=/bin/systemctl stop booster.service
-ExecStart=/bin/systemctl start booster.service
 ExecStart=/bin/systemctl stop maliit-server.service
 ExecStart=/bin/systemctl start maliit-server.service
 RemainAfterExit=yes
