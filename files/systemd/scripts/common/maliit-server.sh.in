@@ -45,7 +45,11 @@ fi
 c="$(cat $XDG_RUNTIME_DIR/surface-manager.windowcount 2>/dev/null)"
 [ "$c" -eq "$c" 2>/dev/null ] || c=1
 for i in $(seq $c) ; do
-    systemctl start maliit-server@$(($i - 1))
+    if [[ $i == 1 ]]; then
+        systemctl start maliit-server@$(($i - 1))
+    else
+        systemctl start maliit-server@"$(($i - 1)) -no-ls2-service"
+    fi
 done
 
 if [ -z "$WAYLAND_DISPLAY" ]; then
