@@ -53,6 +53,7 @@ DefaultEnvironment=WEBOS_GL_DISABLE_THREADED_RENDERING=1
 DefaultEnvironment=XDG_DIR=/tmp/xdg
 DefaultEnvironment=XDG_RUNTIME_DIR=/tmp/xdg
 DefaultEnvironment=XDG_CACHE_HOME=/var/cache/xdg
+DefaultEnvironment=QT_LOAD_TESTABILITY=@WEBOS_QTTESTABILITY_ENABLED@
 
 # ROS2 settings
 DefaultEnvironment=AMENT_PREFIX_PATH=/usr
