@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2018 LG Electronics, Inc.
+// Copyright (c) 2017-2020 LG Electronics, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -41,7 +41,11 @@ int main(int argc, char *argv[])
       bootmode = true;
 
   InitCtl initCtl;
-  initCtl.process(cmdLine, bootmode);
+  try {
+      initCtl.process(cmdLine, bootmode);
+  } catch (const std::exception& e) {
+      g_logger.write("[DEBUG] initctl process is failed=Message" + string(e.what()));
+  }
 
   g_logger.write("[DEBUG] EXIT");
   g_logger.endl();
