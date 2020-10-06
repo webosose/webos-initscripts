@@ -1,4 +1,4 @@
-// Copyright (c) 2018 LG Electronics, Inc.
+// Copyright (c) 2018-2020 LG Electronics, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -58,7 +58,11 @@ int main(int argc, char *argv[])
   g_logger.write(dbgmsg);
 
   Restart restart;
-  restart.process(cmdLine);
+  try {
+      restart.process(cmdLine);
+  } catch (const std::exception& e) {
+      g_logger.write("[DEBUG] restart process is failed=Message" + string(e.what()));
+  }
 
   g_logger.write("[DEBUG] EXIT");
   g_logger.endl();
