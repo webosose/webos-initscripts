@@ -25,132 +25,110 @@ webos_component(3 0 0)
 webos_distro_dep()
 webos_distro_variant_dep()
 
-if(${WEBOS_TARGET_DISTRO} STREQUAL "webos")
-    add_subdirectory(src/initctl)
-    add_subdirectory(src/utils)
-endif()
+add_subdirectory(src/initctl)
+add_subdirectory(src/utils)
 
-##### environments #####
-webos_configure_source_files(systemd_in_global_env
-    files/systemd/environments/30-webos-global.conf)
 
-set(systemd_conf
-    files/systemd/environments/system.conf)
-
-##### overrides #####
-set(systemd_common_override
-    files/systemd/overrides/common/default-webos.target.wants
-    files/systemd/overrides/common/local-fs.target.wants
-    files/systemd/overrides/common/multi-user.target.wants
-    files/systemd/overrides/common/webos-bd.target.wants
-    files/systemd/overrides/common/webos-cbd.target.wants
-    files/systemd/overrides/common/webos-dis.target.wants
-    files/systemd/overrides/common/webos-ibd.target.wants
-    files/systemd/overrides/common/webos-mbd.target.wants
-    files/systemd/overrides/common/webos-rbd.target.wants)
-
-if(${WEBOS_TARGET_DISTRO} STREQUAL "webos")
-    set(systemd_distro_override
-        files/systemd/overrides/${WEBOS_TARGET_DISTRO}/multi-user.target.wants
-        files/systemd/overrides/${WEBOS_TARGET_DISTRO}/webos-bd.target.wants
-        files/systemd/overrides/${WEBOS_TARGET_DISTRO}/webos-cbd.target.wants)
-endif()
-
-##### scripts #####
-webos_configure_source_files(systemd_common_in_scripts
-    files/systemd/scripts/common/configurator-db8.sh
-    files/systemd/scripts/common/devmode.sh
-    files/systemd/scripts/common/jail.sh
-    files/systemd/scripts/common/luna-download-mgr.sh
-    files/systemd/scripts/common/maliit-server.sh
-    files/systemd/scripts/common/populate-volatile.sh
-    files/systemd/scripts/common/sam.sh
-    files/systemd/scripts/common/settings-service.sh)
-
-if(${WEBOS_TARGET_DISTRO} STREQUAL "webos")
-    webos_configure_source_files(systemd_distro_in_scripts
-        files/systemd/scripts/${WEBOS_TARGET_DISTRO}/swap-on.sh
-        files/systemd/scripts/${WEBOS_TARGET_DISTRO}/usbctrl.sh
-        files/systemd/scripts/${WEBOS_TARGET_DISTRO}/webos-bluetooth-service.sh
-        files/systemd/scripts/${WEBOS_TARGET_DISTRO}/zram-on.sh)
-endif()
+#################################
+# /etc/profile.d
+#################################
 
 set(systemd_enable_systemd_environments
-    files/systemd/scripts/common/get-systemd-environments.sh)
+    rootfs/etc/profile.d/get-systemd-environments.sh)
 
-if(${WEBOS_TARGET_DISTRO} STREQUAL "webos")
-    set(journald_log_handle_script
-        files/systemd/scripts/${WEBOS_TARGET_DISTRO}/save-journald-logs.py)
-endif()
+install(PROGRAMS
+    ${systemd_enable_systemd_environments}
+    DESTINATION ${WEBOS_INSTALL_SYSCONFDIR}/profile.d)
 
-##### services #####
-set(systemd_common_service_units
-    files/systemd/services/common/)
 
-if(${WEBOS_TARGET_DISTRO} STREQUAL "webos")
-    set(systemd_distro_service_units
-        files/systemd/services/${WEBOS_TARGET_DISTRO}/)
-endif()
+#################################
+# /etc/tmpfiles.d
+#################################
 
-set(systemd_mask_service_units
-    files/systemd/services/mask/)
-
-##### targets #####
-set(systemd_common_target_units
-    files/systemd/targets/common/)
-
-##### tmpfiles #####
 webos_configure_source_files(systemd_in_tmpfile
-    files/systemd/tmpfiles/30-run.conf
-    files/systemd/tmpfiles/31-var.conf)
+    rootfs/etc/tmpfiles.d/30-run.conf
+    rootfs/etc/tmpfiles.d/31-var.conf)
+
+install(FILES
+    ${systemd_in_tmpfile}
+    DESTINATION ${WEBOS_INSTALL_SYSCONFDIR}/tmpfiles.d)
 
 
-##################################
-# Install to /etc/...
-##################################
+#################################
+# /etc/systemd
+#################################
 
-# Global env files
+webos_configure_source_files(systemd_in_global_env
+    rootfs/etc/systemd/system.conf.d/webos-global.conf)
+
+set(systemd_conf
+    rootfs/etc/systemd/system.conf.d/system.conf)
+
 install(FILES
     ${systemd_in_global_env}
     ${systemd_conf}
     DESTINATION ${WEBOS_INSTALL_SYSCONFDIR}/systemd/system.conf.d)
 
-# Support to enable systemd environments on console
-install(PROGRAMS
-    ${systemd_enable_systemd_environments}
-    DESTINATION ${WEBOS_INSTALL_SYSCONFDIR}/profile.d)
+#################################
+# /etc/systemd/system
+#################################
 
-# tmpfiles
+file(GLOB etc_units
+    "rootfs/etc/systemd/system/*.service"
+    "rootfs/etc/systemd/system/*.socket")
+
 install(FILES
-    ${systemd_in_tmpfile}
-    DESTINATION ${WEBOS_INSTALL_SYSCONFDIR}/tmpfiles.d)
-
-# Masking and Override systemd module
-install(DIRECTORY
-    ${systemd_mask_service_units}
+    ${etc_units}
     DESTINATION ${WEBOS_INSTALL_SYSCONFDIR}/systemd/system)
 
+#################################
+# /lib/systemd/system
+#################################
 
-##################################
-# Install to /lib/...
-##################################
+file(GLOB lib_units
+    "rootfs/lib/systemd/system/*.service"
+    "rootfs/lib/systemd/system/*.path"
+    "rootfs/lib/systemd/system/*.target")
 
-# install overrides (target wants)
+install(FILES ${lib_units} DESTINATION ${WEBOS_INSTALL_BASE_LIBDIR}/systemd/system)
+
+set(lib_wants
+    rootfs/lib/systemd/system/default-webos.target.wants
+    rootfs/lib/systemd/system/local-fs.target.wants
+    rootfs/lib/systemd/system/multi-user.target.wants
+    rootfs/lib/systemd/system/webos-bd.target.wants
+    rootfs/lib/systemd/system/webos-cbd.target.wants
+    rootfs/lib/systemd/system/webos-dis.target.wants
+    rootfs/lib/systemd/system/webos-ibd.target.wants
+    rootfs/lib/systemd/system/webos-mbd.target.wants
+    rootfs/lib/systemd/system/webos-rbd.target.wants
+    rootfs/lib/systemd/system/multi-user.target.wants
+    rootfs/lib/systemd/system/webos-bd.target.wants
+    rootfs/lib/systemd/system/webos-cbd.target.wants)
+
 install(DIRECTORY
-    ${systemd_common_override}
-    ${systemd_distro_override}
+    ${lib_wants}
     DESTINATION ${WEBOS_INSTALL_BASE_LIBDIR}/systemd/system)
 
-# install scripts
-install(PROGRAMS
-    ${systemd_common_in_scripts}
-    ${systemd_distro_in_scripts}
-    ${journald_log_handle_script}
-    DESTINATION ${WEBOS_INSTALL_BASE_LIBDIR}/systemd/system/scripts)
 
-# install systemd units
-install(DIRECTORY
-    ${systemd_common_service_units}
-    ${systemd_distro_service_units}
-    ${systemd_common_target_units}
-    DESTINATION ${WEBOS_INSTALL_BASE_LIBDIR}/systemd/system)
+#################################
+# /lib/systemd/system/scripts
+#################################
+
+install(PROGRAMS rootfs/lib/systemd/system/scripts/save-journald-logs.py DESTINATION ${WEBOS_INSTALL_BASE_LIBDIR}/systemd/system/scripts)
+
+webos_configure_source_files(lib_in_scripts
+    rootfs/lib/systemd/system/scripts/configurator-db8.sh
+    rootfs/lib/systemd/system/scripts/devmode.sh
+    rootfs/lib/systemd/system/scripts/jail.sh
+    rootfs/lib/systemd/system/scripts/luna-download-mgr.sh
+    rootfs/lib/systemd/system/scripts/maliit-server.sh
+    rootfs/lib/systemd/system/scripts/populate-volatile.sh
+    rootfs/lib/systemd/system/scripts/sam.sh
+    rootfs/lib/systemd/system/scripts/settings-service.sh
+    rootfs/lib/systemd/system/scripts/swap-on.sh
+    rootfs/lib/systemd/system/scripts/usbctrl.sh
+    rootfs/lib/systemd/system/scripts/webos-bluetooth-service.sh
+    rootfs/lib/systemd/system/scripts/zram-on.sh)
+
+install(PROGRAMS ${lib_in_scripts} DESTINATION ${WEBOS_INSTALL_BASE_LIBDIR}/systemd/system/scripts)
