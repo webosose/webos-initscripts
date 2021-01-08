@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2019 LG Electronics, Inc.
+# Copyright (c) 2017-2021 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,13 +34,10 @@ DefaultEnvironment=PATH=/usr/sbin:/usr/bin:/sbin:/bin
 DefaultEnvironment=KDRV_DIR=/mnt/lg/res/lglib/kdrv
 DefaultEnvironment=LGAPP_DIR=/mnt/lg/lgapp
 DefaultEnvironment=RWMOUNT_FLAG=/tmp/mount-readwrite.conf.done
-DefaultEnvironment=QT_VER=qt5
 DefaultEnvironment=KLOG=/dev/kmsg
 
 # Qt/wayland
-DefaultEnvironment=QML2_IMPORT_PATH=@WEBOS_INSTALL_LIBDIR@/qt5/qml
-DefaultEnvironment=QMLSCENE_DEVICE=customcontext
-DefaultEnvironment=QSG_PROGRAM_BINARY_STORE=/var/cache/qsg-shader-cache
+DefaultEnvironment=QML2_IMPORT_PATH=@WEBOS_INSTALL_LIBDIR@/qml
 DefaultEnvironment=QT_HARFBUZZ=new
 DefaultEnvironment=QT_IM_MODULE=wayland
 DefaultEnvironment=QT_QPA_FONTDIR=@WEBOS_INSTALL_DATADIR@/fonts
@@ -50,7 +47,6 @@ DefaultEnvironment=QT_WAYLAND_HARDWARE_INTEGRATION=wayland-egl
 DefaultEnvironment=QT_WAYLAND_SHELL_INTEGRATION=webos
 DefaultEnvironment=QT_WAYLAND_XKB_RULE_NAMES=evdev:lgwebostv:us::
 DefaultEnvironment=WEBOS_GL_DISABLE_THREADED_RENDERING=1
-DefaultEnvironment=XDG_DIR=/tmp/xdg
 DefaultEnvironment=XDG_RUNTIME_DIR=/tmp/xdg
 DefaultEnvironment=XDG_CACHE_HOME=/var/cache/xdg
 DefaultEnvironment=QT_LOAD_TESTABILITY=@WEBOS_QTTESTABILITY_ENABLED@
