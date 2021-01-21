@@ -1,4 +1,4 @@
-# Copyright (c) 2007-2020 LG Electronics, Inc.
+# Copyright (c) 2007-2021 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -129,6 +129,7 @@ webos_configure_source_files(lib_in_scripts
     rootfs/lib/systemd/system/scripts/swap-on.sh
     rootfs/lib/systemd/system/scripts/usbctrl.sh
     rootfs/lib/systemd/system/scripts/webos-bluetooth-service.sh
+    rootfs/lib/systemd/system/scripts/webos-connman-adapter.sh
     rootfs/lib/systemd/system/scripts/zram-on.sh)
 
 install(PROGRAMS ${lib_in_scripts} DESTINATION ${WEBOS_INSTALL_BASE_LIBDIR}/systemd/system/scripts)

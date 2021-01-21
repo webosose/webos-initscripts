@@ -1,4 +1,5 @@
-# Copyright (c) 2017-2021 LG Electronics, Inc.
+#!/bin/sh
+# Copyright (c) 2021 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,18 +15,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# Open webOS component for managing network connections using connman
+# To provide enough time for inbuilt adapter to be configured
 
-[Unit]
-Description=webos - "%n"
-Requires=ls-hubd.service
-Wants=connman.service
-After=ls-hubd.service connman.service
-
-[Service]
-Type=simple
-OOMScoreAdjust=-500
-EnvironmentFile=-/var/systemd/system/env/webos-connman-adapter.env
-ExecStart=/usr/sbin/webos-connman-adapter
-ExecStartPost=/lib/systemd/system/scripts/webos-connman-adapter.sh
-Restart=on-failure
+sleep 5
+/usr/sbin/modprobe cdc_ether
