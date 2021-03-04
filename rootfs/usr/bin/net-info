@@ -1,0 +1,174 @@
+#!/bin/bash
+# Copyright (c) 2021 LG Electronics, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# START, READ_IF_INFO_ENTER, READING_IFINFO, END_READ_IFINFO,READ_OTHERS, END
+
+STATE="START"
+
+STATE="READ_IF_INFO_ENTER"
+STATE_INTERFACE="START"
+
+DEVICE_ID="$1"
+SET_ID="$2"
+
+printf "{ \"device_id\" : \"%s\","  ${DEVICE_ID}
+printf " \"set_id\" : \"%s\","  "${SET_ID}"
+printf " \"info_type\" : \"ifinfo\","
+printf " \"ifinfo\": {"
+
+STATE="START_READING_IFINFO"
+
+ifconfig | while read line
+do
+  KEYS=$(echo $line | cut -d ' ' -f 1 )
+  VALUE=$(echo $line | cut -d ' ' -f 2 )
+  if [ -z "${KEYS}" ];  then
+    STATE="START_READING_IFINFO"
+    if [ $STATE_INTERFACE == "START" ] ; then
+      printf "}}\n"
+      STATE_INTERFACE="END"
+    fi
+  elif [ "$STATE" == "START_READING_IFINFO" ]; then
+    # read interface name
+    if [ $STATE_INTERFACE == "END" ]; then
+      printf "{ \"device_id\" : \"%s\","  ${DEVICE_ID}
+      printf " \"set_id\" : \"%s\","  "${SET_ID}"
+      printf " \"info_type\" : \"ifinfo\","
+      printf " \"ifinfo\": {"
+    fi
+    STATE_INTERFACE="START"
+    INTERFACE=$(echo $line | cut -d ' ' -f 1)
+    printf " \"interface\" : \"%s\", " $INTERFACE
+    KEYS=$(echo $line | cut -d ':' -f 1 | cut -d ' ' -f 2-)
+    if [ ${INTERFACE} == "lo" ]; then
+      VALUES=$(echo $line | cut -d ':' -f 2 |cut -d ' ' -f 1-2)
+      REMAIN=""
+      printf " \"%s\" : \"%s\"" "$KEYS" "$VALUES"
+    else
+      VALUES=$(echo $line | cut -d ':' -f 2 |cut -d ' ' -f 1)
+      REMAIN=$(echo $line | cut -d ':' -f 2- | cut -d ' ' -f 2-)
+      printf " \"%s\" : \"%s\"," "$KEYS" "$VALUES"
+    fi
+    STATE="REMAIN_READING_IFINFO"
+  fi
+
+  case "$STATE" in
+  "START_READING_IFINFO")
+     ;;
+  "REMAIN_READING_IFINFO")
+     if [ -n "$REMAIN" ]; then
+       KEYS=$(echo "$REMAIN" | cut -d ' ' -f 1)
+       VALUE=$(echo "$REMAIN" | cut -d ' ' -f 2)
+
+       printf "\"%s\":\"%s\"" "$KEYS" "$VALUE"
+       REMAIN=$(echo "$REMAIN" | cut -d ' ' -f 3-)
+     fi
+     if [ -n "$REMAIN" ]; then
+       STATE="REMAIN_READING_IFINFO";
+     else
+       STATE="READING_IFINFO"
+     fi
+    ;;
+   "READING_IFINFO")
+     printf ","
+     if [ "$KEYS" == "inet" ]; then
+        IP=$(echo $line |  cut -d ":" -f 2 |cut -d " " -f 1)
+        printf "\"%s\": \"%s\", " "inet addr" "$IP"
+        BCAST=$(echo $line | cut -d ":" -f 3 |cut -d " " -f 1)
+        MASK=$(echo $line | cut -d ":" -f 4 |cut -d " " -f 1)
+        if [ -n "$MASK" ];then
+          printf "\"%s\": \"%s\", " "bcast"  "$BCAST"
+          printf "\"%s\": \"%s\" " "mask"  "$MASK"
+        else
+          printf "\"%s\": \"%s\" " "bcast"  "$BCAST"
+        fi
+     elif [ "$KEYS" == "inet6" ]; then
+        ADDR=$(echo $line | cut -d " " -f 3 )
+        printf "\"%s\":\"%s\"," "inet6 addr" "$ADDR"
+        SCOPE=$(echo $line | cut -d " " -f 4 |cut -d ":" -f 2)
+        printf "\"%s\": \"%s\" " "Scope"  "$SCOPE"
+     elif [ "$KEYS" == "UP" ]; then
+        STATUS="${line%%MTU*}"
+        printf "\"Status\": \"%s\"," "$STATUS"
+
+        MTU_OTHERS="${line#*MTU}"
+        MTU=$(echo "${MTU_OTHERS}" | cut -d ':' -f 2 | cut -d ' ' -f 1)
+        printf "\"MTU\":%s," "$MTU"
+
+        METRIC=$(echo "${MTU_OTHERS}" | cut -d ':' -f 3)
+        printf "\"METRIC\":%s" "$METRIC"
+     elif [ "$KEYS" == "RX" ]; then
+        BUF=$(echo $line|cut -d ' ' -f 2-)
+        KEYS=$(echo $BUF | cut -d ' ' -f 1 | cut -d ':' -f 1)
+
+        if [ "$KEYS" == "packets" ];
+        then
+          PACKET=$(echo $BUF | cut -d ' ' -f 1 | cut -d ':' -f 2)
+          printf "\"RX packets\":%s," "$PACKET"
+
+          ERROR=$(echo $BUF |cut -d ' ' -f 2 |cut -d ':' -f 2)
+          printf "\"RX errors\":%s," "$ERROR"
+
+          DROP=$(echo $BUF |cut -d ' ' -f 3 | cut -d ':' -f 2)
+          printf "\"RX dropped\":%s," "$DROP"
+
+          OVERRUN=$(echo $BUF |cut -d ' ' -f 4 | cut -d ':' -f 2)
+          printf "\"RX overruns\":%s," "$OVERRUN"
+
+          FRAME=$(echo $BUF |cut -d ' ' -f 5 | cut -d ':' -f 2)
+          printf "\"RX frame\":%s" "$FRAME"
+        else
+          RXBYTES=$(echo $BUF | cut -d ' ' -f 1 |cut -d ':' -f 2)
+          printf "\"RX bytes\":%s," "$RXBYTES"
+
+          TXBYTES=$(echo $BUF |cut -d ' ' -f 5 |cut -d ':' -f 2)
+          printf "\"TX bytes\":%s" "$TXBYTES"
+        fi
+     elif [ "$KEYS" == "TX" ]; then
+        BUF=$(echo $line|cut -d ' ' -f 2-)
+        PACKET=$(echo $BUF | cut -d ' ' -f 1 | cut -d ':' -f 2)
+        printf "\"TX packets\":%s," "$PACKET"
+
+        ERROR=$(echo $BUF |cut -d ' ' -f 2 |cut -d ':' -f 2)
+        printf "\"TX errors\":%s," "$ERROR"
+
+        DROP=$(echo $BUF |cut -d ' ' -f 3 | cut -d ':' -f 2)
+        printf "\"TX dropped\":%s," "$DROP"
+
+        OVERRUN=$(echo $BUF |cut -d ' ' -f 4 | cut -d ':' -f 2)
+        printf "\"TX overruns\":%s," "$OVERRUN"
+
+        CARRIER=$(echo $BUF |cut -d ' ' -f 5 | cut -d ':' -f 2)
+        printf "\"TX carrier\":%s" "$CARRIER"
+     else
+        KEYS=$(echo $line|cut -d ' ' -f 1 | cut -d ':' -f 1)
+        VALUES=$(echo $line|cut -d ' ' -f 1 | cut -d ':' -f 2)
+        printf "\"%s\":%s," "$KEYS" "$VALUES"
+
+        KEYS=$(echo $line|cut -d ' ' -f 2 | cut -d ':' -f 1)
+        VALUES=$(echo $line|cut -d ' ' -f 2 | cut -d ':' -f 2)
+        printf "\"%s\":%s" "$KEYS" "$VALUES"
+     fi
+    ;;
+   "END_READING_IFINFO")
+    ;;
+  *)
+    echo "invalid state \"$state\""
+    ;;
+  esac
+done
+printf "\n"
