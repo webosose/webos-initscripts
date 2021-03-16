@@ -1,0 +1,243 @@
+#!/bin/bash
+# Copyright (c) 2021 LG Electronics, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+PATH=/usr/bin:/usr/sbin:/bin:/sbin
+
+unset REPORT_LOG ACTION
+ACTION="HELP"
+
+FLUENTBIT="/usr/bin/fluent-bit"
+
+# Flush 3 seconds
+FLB_OPT='-f 3'
+FLB_PARSER='-R /etc/fluent-bit/parsers.conf'
+FLB_INPUT="-i stdin"
+
+HOST=10.177.247.127
+PORT=9200
+HOST_PORT=$HOST:$PORT
+
+# -m "*" option is very important in multiple input plugins in command line
+FLB_OUTPUT='-o stdout -m "*"'
+FLB_OUTPUT_ES='-o es -p Host="$HOST" -p "Port=$PORT" -p Index=system_info -p "type=SYSTEM_INFO" -m "*"'
+
+FAILED_CONF="/etc/fluent-bit/systemctl-failed.conf"
+JOBS_LIST_CONF="/etc/fluent-bit/systemctl-list.conf"
+ALLINFO_CONF="/etc/fluent-bit/system-allinfo.conf"
+
+LOG_DIR="/var/log/collect"
+LOG_FILE="system_info.log"
+SVG_FILE="systemd.svg"
+SLEEP_SEC=3
+
+SET_ID=$(date +%s)
+DEVICE_ID=$(nyx-cmd DeviceInfo query nduid)
+WEBOS_DISTRO="$(nyx-cmd OSInfo query webos_name | cut -d ' ' -f 2)"
+
+FLB_ADD_FILTER='-F modify -p "Add=device_id "${DEVICE_ID}"" -p "Add=set_id "${SET_ID}"" -p "Add=webos_distro "${WEBOS_DISTRO}"" -m "systemctl*"'
+FLB_NEST_FILTER='-F nest -p "Operation=nest" -p "Wildcard=*" -p "Nest_under=failed_info" -m "systemctl-failed" -F nest -p "Operation=nest" -p "Wildcard=*" -p "Nest_under=listjobs_info" -m "systemctl-listjobs"'
+FLB_ADD_INFO_FILTER='-F modify -p "Add=info_type failed_info" -m "systemctl-failed" -F modify -p "Add=info_type listjobs_info" -m "systemctl-listjobs"'
+
+FLB_NEST_INFO='-F nest -p "Operation=nest"  -p "Wildcard=*" -p "Nest_under=osinfo" -m "osinfo" -F nest -p "Operation=nest" -p "Wildcard=*" -p "Nest_under=deviceinfo" -m "deviceinfo" -F nest -p "Operation=nest" -p "Wildcard=*" -p "Nest_under=runninginfo" -m "runninginfo" -F nest -p "Operation=nest" -p "Wildcard=*" -p "Nest_under=statusinfo" -m "statusinfo" '
+FLB_ADD_INFO='-F modify -p "Add=device_id "${DEVICE_ID}"" -p "Add=set_id "${SET_ID}"" -p "Add=webos_distro "${WEBOS_DISTRO}"" -m "*"'
+FLB_ADD_INFOTYPE='-F modify -p "Add=info_type osinfo" -m "osinfo" -F modify -p "Add=info_type deviceinfo" -m "deviceinfo" -F modify -p "Add=info_type runninginfo" -m "runninginfo" -F modify -p "Add=info_type statusinfo" -m "statusinfo"'
+FLB_ADD_DISTRO='-F modify -p "Add=webos_distro "${WEBOS_DISTRO}"" -m "*"'
+
+# The below variable is used in fluent-bit command line
+FLB_FAILED_INPUT='-i exec -p "command=systemctl --failed" -p "interval_sec=2" -t systemctl-failed '
+FLB_FAILED_FILTER='-F parser -p "Key_name=exec" -p "Parser=systemctl-custom" -m systemctl-failed -p "regex=sub failed"  -F grep -p "regex=sub failed" -m systemctl-failed '
+
+FLB_JOBSLIST_INPUT='-i exec -p "command=systemctl list-jobs" -t systemctl-listjobs -p "interval_sec=2" '
+FLB_JOBSLIST_FILTER='-F parser -m systemctl-listjobs -p "Key_name=exec" -p "parser=systemctl-list-jobs" -F grep -m systemctl-listjobs -p "regex=type start"'
+
+function init_log {
+  # initialize info file
+  echo >$LOG_DIR/$LOG_FILE
+}
+
+function all {
+  get_system_overview
+
+  # fluentbit should be executed once for systemctl. It gethers some informations in 2 sec
+  #  It's ok.
+  (eval $FLUENTBIT $FLB_OPT $FLB_PARSER $FLB_FAILED_INPUT $FLB_FAILED_FILTER $FLB_JOBSLIST_INPUT $FLB_JOBSLIST_FILTER ${FLB_NEST_FILTER} ${FLB_ADD_FILTER} ${FLB_ADD_INFO_FILTER} $FLB_OUTPUT $FLB_OUTPUT_ES >> $LOG_DIR"/"$LOG_FILE &)
+
+  # Another method (Testd.It's ok)
+  #($(echo  $FLUENTBIT "-c" $ALLINFO_CONF)&) >> $LOG_DIR"/"$LOG_FILE
+
+  # so kill fluent-bit at 3 seconds
+  sleep 3
+  kill $(pidof fluent-bit)
+}
+
+function service_failed {
+  get_system_overview
+  # fluentbit should be executed once for systemctl. It gethers some informations in 2 sec
+  # at below line, it worked, but we can't insert SET_ID, DEVICE_ID in runtime
+  #($(echo $FLUENTBIT  " -c " $FAILED_CONF)&) >> $LOG_DIR"/"$LOG_FILE
+  (eval $FLUENTBIT $FLB_OPT $FLB_PARSER $FLB_FAILED_INPUT $FLB_FAILED_FILTER ${FLB_NEST_FILTER} ${FLB_ADD_FILTER} ${FLB_ADD_INFO_FILTER} $FLB_OUTPUT $FLB_OUTPUT_ES >> $LOG_DIR"/"$LOG_FILE &)
+
+  # so kill fluent-bit at 3 seconds
+  sleep 3
+  kill $(pidof fluent-bit)
+}
+
+function system_list_jobs {
+  get_system_overview
+  # fluentbit should be executed once for systemctl. It gethers some informations in 2 sec
+  # at below line, it worked, but we can't insert SET_ID, DEVICE_ID in runtime.it will be remained for example.
+  # ($(echo  $FLUENTBIT "-c" $JOBS_LIST_CONF)&) >> $LOG_DIR"/"$LOG_FILE
+  (eval $FLUENTBIT $FLB_OPT $FLB_PARSER $FLB_JOBSLIST_INPUT $FLB_JOBSLIST_FILTER ${FLB_NEST_FILTER} ${FLB_ADD_FILTER} ${FLB_ADD_INFO_FILTER} $FLB_OUTPUT $FLB_OUTPUT_ES >> $LOG_DIR"/"$LOG_FILE &)
+
+  # so kill fluent-bit at 3 seconds
+  sleep 3
+  kill $(pidof fluent-bit)
+}
+
+function get_system_overview {
+
+  # It get system informations from system,and pass these to fluent-bit
+  OSINFO=$(nyx-cmd OSInfo query --format=json)
+  DEVICEINFO=$(nyx-cmd DeviceInfo query --format=json)
+
+  GET_STATUS=$(luna-send -n 1 -w 250 -f luna://com.webos.service.connectionmanager/getStatus '{}')
+  RUNNING_PS=$(luna-send -n 1 -w 250 -f luna://com.webos.applicationManager/running '{}')
+
+  IF_INFO="$(net-info ${DEVICE_ID} ${SET_ID})"
+  DF_INFO="$(disk-info ${DEVICE_ID} ${SET_ID})"
+  PSAUX_INFO="$(process-info ${DEVICE_ID} ${SET_ID})"
+  UPTIME_INFO="$(uptime-info ${DEVICE_ID} ${SET_ID})"
+  DATE_INFO="$(date-info ${DEVICE_ID} ${SET_ID})"
+  MOUNTS_INFO="$(mount-info ${DEVICE_ID} ${SET_ID})"
+  CPU_INFO="$(cpu-info ${DEVICE_ID} ${SET_ID})"
+  LS_PRE="$(preference-dir-info ${DEVICE_ID} ${SET_ID})"
+  LSMONINFO="$(lsmonitor-list-info ${DEVICE_ID} ${SET_ID})"
+
+  echo $OSINFO  | (eval $FLUENTBIT $FLB_INPUT -t osinfo $FLB_NEST_INFO $FLB_ADD_INFO $FLB_ADD_INFOTYPE  $FLB_OUTPUT ${FLB_OUTPUT_ES} )  >> $LOG_DIR/$LOG_FILE
+  echo $DEVICEINFO | (eval $FLUENTBIT $FLB_INPUT -t deviceinfo $FLB_NEST_INFO $FLB_ADD_INFO $FLB_ADD_INFOTYPE ${FLB_OUTPUT} $FLB_OUTPUT_ES) >> $LOG_DIR/$LOG_FILE
+  echo "$RUNNING_PS"| (eval $FLUENTBIT $FLB_INPUT -t runninginfo $FLB_NEST_INFO $FLB_ADD_INFO $FLB_ADD_INFOTYPE $FLB_OUTPUT $FLB_OUTPUT_ES) >> $LOG_DIR/$LOG_FILE
+  echo "$GET_STATUS" | (eval $FLUENTBIT $FLB_INPUT -t statusinfo  $FLB_NEST_INFO $FLB_ADD_INFO $FLB_ADD_INFOTYPE $FLB_OUTPUT $FLB_OUTPUT_ES) >> $LOG_DIR/$LOG_FILE
+
+ # it is especially added webos_distro information by fluentbint
+  echo ${DATE_INFO} ${IF_INFO} ${PSAUX_INFO} ${MOUNTS_INFO} ${CPU_INFO}  $UPTIME_INFO $DF_INFO $LS_PRE $LSMONINFO | (eval $FLUENTBIT $FLB_INPUT $FLB_ADD_DISTRO $FLB_OUTPUT  $FLB_OUTPUT_ES ) >> $LOG_DIR/$LOG_FILE
+
+}
+
+function put_bootchart {
+  get_system_overview
+  systemd-analyze plot >  $LOG_DIR/$SVG_FILE
+  bootchart-info ${HOST_PORT} ${DEVICE_ID} ${SET_ID}
+}
+function  usage {
+  echo "Usage: $0 [options]"
+  echo "options:"
+  echo "        -a : all information"
+  echo "        -l : list queued jobs (systemctl list-jobs)"
+  echo "        -f : show failed jobs (systemctl --failed)"
+  echo "        -r : print the result information"
+  echo "        -p : make bootchart (systemd-plot chart)"
+  exit 0;
+}
+
+function report_log {
+  cat $LOG_DIR/$LOG_FILE
+}
+
+PARAM="s:alfhrp";
+
+while getopts $PARAM opt; do
+  case $opt in
+    l)
+      if [ -n ${ACTION} ];
+      then
+        if [ "${ACTION}" != "ALL" ]; then
+          if [ "${ACTION}" == "FAILED" ]; then
+            ACTION="ALL"
+          else
+            ACTION="LISTJOBS"
+          fi
+        else
+          ACTION="LISTJOBS"
+        fi
+      else
+        ACTION="LISTJOBS"
+      fi
+      ;;
+    f)
+      if [ -n "${ACTION}" ];
+      then
+        if [ "${ACTION}" != "ALL" ];
+        then
+          if [ "${ACTION}" == "LISTJOBS" ]; then
+            ACTION="ALL"
+          else
+            ACTION="FAILED"
+          fi
+        else
+          ACTION="FAILED"
+        fi
+      else
+        ACTION="LISTJOBS"
+      fi
+      ;;
+    a)
+      ACTION="ALL"
+      ;;
+    h)
+      usage
+      exit 0;
+      ;;
+    r)
+      REPORT_LOG="REPORT"
+      ;;
+    p)
+      ACTION="PLOT"
+      ;;
+    ?)
+      usage
+      ;;
+  esac
+done
+
+if [ "$ACTION" !=  "HELP" ]; then
+  init_log
+  case "$ACTION" in
+     ALL)
+       echo "Collect all information"
+       all
+       ;;
+    FAILED)
+       echo "Collect information of failed services"
+       service_failed
+       ;;
+    LISTJOBS)
+       echo "Collect information of services list-jobs"
+       system_list_jobs
+       ;;
+    PLOT)
+       echo "Systemd Analyze diagram"
+       put_bootchart
+       ;;
+    HELP)
+       usage
+       ;;
+  esac
+  if [ -n "$REPORT_LOG" ]; then
+    report_log
+  fi
+else
+  usage
+fi

@@ -133,3 +133,19 @@ webos_configure_source_files(lib_in_scripts
     rootfs/lib/systemd/system/scripts/zram-on.sh)
 
 install(PROGRAMS ${lib_in_scripts} DESTINATION ${WEBOS_INSTALL_BASE_LIBDIR}/systemd/system/scripts)
+
+
+#################################
+# /usr/bin
+#################################
+
+webos_configure_source_files(preference-dir-info
+   rootfs/usr/bin/preference-dir-info)
+
+install(PROGRAMS ${preference-dir-info} DESTINATION ${WEBOS_INSTALL_BINDIR})
+
+file(GLOB bin_in_scripts
+    "rootfs/usr/bin/collect"
+    "rootfs/usr/bin/*info")
+
+install(PROGRAMS ${bin_in_scripts} DESTINATION ${WEBOS_INSTALL_BINDIR})

@@ -1,0 +1,82 @@
+#!/bin/bash
+# Copyright (c) 2021 LG Electronics, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+DEVICE_ID="$1"
+SET_ID="$2"
+
+# START, READ_LSMON_INFO_ENTER, READING_LSMONINFO, END_READ_LSMONINFO,READ_OTHERS, END
+
+STATE="START_READING_LSMONINFO"
+
+ls-monitor -l  | while read line
+do
+  PID=$(echo $line | cut -d ' ' -f 1 )
+  SERVICE_NAME=$(echo $line | cut -d ' ' -f 2 )
+  EXE=$(echo $line | cut -d ' ' -f 3 )
+  TYPE=$(echo $line | cut -d ' ' -f 4 )
+  UNIQUE_NAME=$(echo $line | cut -d ' ' -f 5 )
+  if [ -z ${PID} ];
+  then
+     printf "\n"
+     break;
+  fi
+  if [ ${PID} == "HUB" -a  ${SERVICE_NAME} == "CLIENTS:" ]; then
+     STATE="START_READING_LSMONINFO";
+  elif [ ${PID} == "PID" -a ${SERVICE_NAME} == "SERVICE" ]; then
+     STATE="START_READING_LSMONINFO";
+  else
+     STATE="READING_LSMONINFO";
+  fi
+
+  if [ $STATE == "ADD_READING_LSMONINFO" ] ; then
+     STATE="READING_LSMONINFO"
+  fi
+
+  if [ -z "$PID" ]; then
+     STATE="END_READ_LSMONINFO";
+  fi
+  case "$STATE" in
+  "START_READING_LSMONINFO")
+     ;;
+  "READING_LSMONINFO")
+     printf "{\"device_id\":\"%s\","  ${DEVICE_ID}
+     printf "\"set_id\":\"%s\","  "${SET_ID}"
+     printf "\"info_type\":\"lsmoninfo\","
+     printf "\"lsmoninfo\":{"
+
+     printf "\"PID\":\"%s\"," "${PID}"
+     printf "\"SERVICE_NAME\":\"%s\"," "${SERVICE_NAME}"
+     printf "\"EXE\":\"%s\" ," "${EXE}"
+     if [ ${TYPE} != "dynamic" -a ${TYPE} != "static" ]; then
+       printf "\"TYPE\":\"%s %s\"," "${TYPE}" ${UNIQUE_NAME}
+       UNIQUE_NAME=$(echo $line | cut -d ' ' -f 6- )
+       printf "\"UNIQUE_NAME\":\"%s\"}}\n" "${UNIQUE_NAME}"
+     else
+       printf "\"TYPE\":\"%s\"," "${TYPE}"
+       printf "\"UNIQUE_NAME\":\"%s\"}}\n" "${UNIQUE_NAME}"
+     fi
+     STATE="ADD_READING_LSMONINFO";
+    ;;
+  "END_READ_LSMONINFO")
+    break;
+    ;;
+  *)
+    echo "invalid state \"$state\""
+    ;;
+  esac
+done
+printf "\n"
