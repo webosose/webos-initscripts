@@ -17,5 +17,7 @@
 
 # To provide enough time for inbuilt adapter to be configured
 
-sleep 5
-/usr/sbin/modprobe cdc_ether
+if ! grep -qs qemu /etc/hostname ; then
+    sleep 5
+    /sbin/modprobe cdc_ether
+fi
