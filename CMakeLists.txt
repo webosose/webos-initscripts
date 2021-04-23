@@ -75,7 +75,8 @@ install(FILES
 
 file(GLOB etc_units
     "rootfs/etc/systemd/system/*.service"
-    "rootfs/etc/systemd/system/*.socket")
+    "rootfs/etc/systemd/system/*.socket"
+    "rootfs/etc/systemd/system/*.timer")
 
 install(FILES
     ${etc_units}
