@@ -27,6 +27,7 @@ webos_distro_variant_dep()
 
 add_subdirectory(src/initctl)
 add_subdirectory(src/utils)
+add_subdirectory(src/coreexam)
 
 
 #################################
