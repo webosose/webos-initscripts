@@ -21,7 +21,7 @@ webos_add_compiler_flags(ALL --std=c++11)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../initctl)
 
-add_executable(coreexam_webos CoreExample.cpp)
+add_executable(coredump_example CoreExample.cpp)
 
 # Install
-install(TARGETS coreexam_webos RUNTIME DESTINATION ${WEBOS_INSTALL_ROOT}/bin)
+install(TARGETS coredump_example RUNTIME DESTINATION ${WEBOS_INSTALL_BINDIR})
