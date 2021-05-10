@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # @@@LICENSE
 #
 # Copyright (c) 2019 LG Electronics, Inc.
