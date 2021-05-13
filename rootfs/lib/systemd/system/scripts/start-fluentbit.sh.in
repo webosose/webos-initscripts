@@ -1,0 +1,22 @@
+#!/bin/sh
+
+DISTRO_TYPE="unofficial"
+
+DISTRO="$(nyx-cmd OSInfo query webos_name | cut -d ' ' -f 2| tr [A-Z] [a-z])"
+BUILD_ID="$(nyx-cmd OSInfo query webos_build_id)"
+DEVICE_NAME="$(nyx-cmd DeviceInfo query device_name)"
+
+# check official or non-official
+BUILD_ID=${BUILD_ID//[0-9]/}
+
+if [ -z "$BUILD_ID" ] ;
+then
+   DISTRO_TYPE="official"
+fi
+
+if [[ "${DEVICE_NAME}" != "qemux86" -a "${DEVICE_NAME}" != "qemux86-64" ]] ;
+then
+   fluent-bit -c /etc/fluent-bit/fluent-bit_${DISTRO}_${DISTRO_TYPE}.conf
+else
+   exit 0
+fi
