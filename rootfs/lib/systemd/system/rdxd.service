@@ -1,4 +1,4 @@
-# Copyright (c) 2019 LG Electronics, Inc.
+# Copyright (c) 2017-2018 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,13 +14,17 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+# Remote diagnostics daemon implementation
+
 [Unit]
 Description=webos - "%n"
-Conflicts=shutdown.target
-After=rdxd.service
+Requires=ls-hubd.service
+After=ls-hubd.service
 
 [Service]
-Type=oneshot
-ExecStart=-/bin/touch /tmp/backup-log-ready
-ExecStop=/lib/systemd/system/scripts/save-journald-logs.py
-RemainAfterExit=yes
+Type=simple
+OOMScoreAdjust=-500
+EnvironmentFile=-/var/systemd/system/env/rdxd.env
+ExecStartPre=-/bin/mkdir -p /var/spool/rdxd
+ExecStart=/usr/sbin/rdxd -s
+Restart=on-failure
