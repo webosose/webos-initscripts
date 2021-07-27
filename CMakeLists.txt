@@ -121,13 +121,13 @@ install(PROGRAMS rootfs/lib/systemd/system/scripts/save-journald-logs.py DESTINA
 webos_configure_source_files(lib_in_scripts
     rootfs/lib/systemd/system/scripts/configurator-db8.sh
     rootfs/lib/systemd/system/scripts/devmode.sh
+    rootfs/lib/systemd/system/scripts/fluent-bit.sh
     rootfs/lib/systemd/system/scripts/jail.sh
     rootfs/lib/systemd/system/scripts/luna-download-mgr.sh
     rootfs/lib/systemd/system/scripts/maliit-server.sh
     rootfs/lib/systemd/system/scripts/populate-volatile.sh
     rootfs/lib/systemd/system/scripts/sam.sh
     rootfs/lib/systemd/system/scripts/settings-service.sh
-    rootfs/lib/systemd/system/scripts/start-fluentbit.sh
     rootfs/lib/systemd/system/scripts/swap-on.sh
     rootfs/lib/systemd/system/scripts/usbctrl.sh
     rootfs/lib/systemd/system/scripts/webos-bluetooth-service.sh
