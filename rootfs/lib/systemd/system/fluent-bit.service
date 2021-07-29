@@ -19,5 +19,5 @@ Description=webos - "%n"
 
 [Service]
 Type=simple
-ExecStart=/lib/systemd/system/scripts/start-fluentbit.sh
+ExecStart=/lib/systemd/system/scripts/fluent-bit.sh
 Restart=on-failure
