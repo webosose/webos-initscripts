@@ -29,4 +29,3 @@ EnvironmentFile=-/var/systemd/system/env/sam.env
 ExecStartPre=/lib/systemd/system/scripts/sam.sh
 ExecStart=/usr/sbin/sam
 Restart=on-failure
-ManagedOOMMemoryPressure=kill
