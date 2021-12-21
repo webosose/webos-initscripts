@@ -87,6 +87,7 @@ install(FILES
 #################################
 
 file(GLOB lib_units
+    "rootfs/lib/systemd/system/*.slice"
     "rootfs/lib/systemd/system/*.service"
     "rootfs/lib/systemd/system/*.path"
     "rootfs/lib/systemd/system/*.target")
