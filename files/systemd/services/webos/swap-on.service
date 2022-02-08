@@ -18,7 +18,6 @@
 
 [Unit]
 Description=webos - "%n"
-ConditionHost=!qemux86
 Wants=zram-on.service
 After=zram-on.service
 

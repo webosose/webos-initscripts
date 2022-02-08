@@ -18,7 +18,6 @@
 
 [Unit]
 Description=webos - "%n"
-ConditionHost=!qemux86
 
 [Service]
 Type=oneshot
