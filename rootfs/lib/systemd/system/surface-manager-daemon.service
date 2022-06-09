@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2021 LG Electronics, Inc.
+# Copyright (c) 2017-2022 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,5 +29,6 @@ ExecStartPre=/bin/chmod 0770 ${XDG_RUNTIME_DIR}
 ExecStartPre=/bin/chown nobody:compositor ${XDG_RUNTIME_DIR}
 ExecStartPre=-/bin/ln -s ${XDG_RUNTIME_DIR} /var/run/xdg
 ExecStart=/usr/bin/surface-manager.sh
+ExecStop=/usr/bin/rm -f /tmp/lsm-ready
 TimeoutStopSec=5
 Restart=on-failure
