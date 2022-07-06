@@ -25,3 +25,4 @@ OOMScoreAdjust=-500
 EnvironmentFile=-/var/systemd/system/env/unifiedsearch.env
 ExecStart=/usr/sbin/unifiedsearch
 Restart=on-failure
+User=system

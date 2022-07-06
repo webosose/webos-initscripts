@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# directories for 'system' user
+SYSTEM_DIRS=" \
+    @WEBOS_INSTALL_DB8DATADIR@/unifiedsearch \
+"
+
+# create system directories
+for dir in $SYSTEM_DIRS
+do
+    mkdir -p $dir
+    chown system $dir
+done
+
+# touch the jobs is done
+touch @WEBOS_INSTALL_SYSMGR_LOCALSTATEDIR@/preferences/system_dir_created

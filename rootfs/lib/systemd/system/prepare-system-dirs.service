@@ -1,0 +1,23 @@
+# @@@LICENSE
+#
+# Copyright (c) 2019 LG Electronics, Inc.
+#
+# LICENSE@@@
+
+[Unit]
+Description=webos - "%n"
+DefaultDependencies=no
+Conflicts=shutdown.target
+Before=sysinit.target
+After=local-fs.target
+Requires=local-fs.target
+ConditionPathExists=!/var/luna/preferences/system_dir_created
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/lib/systemd/system/scripts/prepare-system-dirs.sh
+StandardError=tty
+
+[Install]
+WantedBy=local-fs.target
