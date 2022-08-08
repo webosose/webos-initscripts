@@ -24,3 +24,4 @@ Type=simple
 OOMScoreAdjust=-1000
 ExecStart=/usr/sbin/com.webos.service.camera2
 Restart=on-failure
+User=camera

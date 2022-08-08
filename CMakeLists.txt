@@ -133,6 +133,7 @@ webos_configure_source_files(lib_in_scripts
     rootfs/lib/systemd/system/scripts/usbctrl.sh
     rootfs/lib/systemd/system/scripts/webos-bluetooth-service.sh
     rootfs/lib/systemd/system/scripts/webos-connman-adapter.sh
+    rootfs/lib/systemd/system/scripts/prepare-system-dirs.sh
     rootfs/lib/systemd/system/scripts/zram-on.sh)
 
 install(PROGRAMS ${lib_in_scripts} DESTINATION ${WEBOS_INSTALL_BASE_LIBDIR}/systemd/system/scripts)
