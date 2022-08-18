@@ -1,6 +1,6 @@
 # @@@LICENSE
 #
-# Copyright (c) 2019 LG Electronics, Inc.
+# Copyright (c) 2022 LG Electronics, Inc.
 #
 # LICENSE@@@
 
@@ -17,7 +17,6 @@ ConditionPathExists=!/var/luna/preferences/system_dir_created
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/lib/systemd/system/scripts/prepare-system-dirs.sh
-StandardError=tty
 
 [Install]
 WantedBy=local-fs.target
