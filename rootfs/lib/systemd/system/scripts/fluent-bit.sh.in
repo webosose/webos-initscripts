@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (c) 2021 LG Electronics, Inc.
+# Copyright (c) 2021-2022 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ if [ -e "/var/luna/preferences/devmode_fluent" ]; then
     DISTRO_TYPE="official"
 fi
 
-if [[ "${DEVICE_NAME}" != "qemux86" -a "${DEVICE_NAME}" != "qemux86-64" ]] ;
+if [ "${DEVICE_NAME}" != "qemux86" -a "${DEVICE_NAME}" != "qemux86-64" ] ;
 then
     fluent-bit -c /etc/fluent-bit/fluent-bit_${DISTRO}_${DISTRO_TYPE}.conf
 else
