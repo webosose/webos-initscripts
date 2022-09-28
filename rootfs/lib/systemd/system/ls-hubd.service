@@ -17,6 +17,7 @@
 [Unit]
 Description=webos - "%n"
 DefaultDependencies=no
+After=var.mount
 
 [Service]
 Type=notify
