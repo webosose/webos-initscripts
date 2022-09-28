@@ -98,7 +98,7 @@ if [ -d $ZRAM_PATH ]; then
     ZRAM_SIZE=$(($DISKSIZE*1024*1024))
 
     echo $MAX_COMP_STREAMS > $ZRAM_PATH/max_comp_streams || true
-    if [ ! -z $COMP_ALGORITHM]; then
+    if [ ! -z $COMP_ALGORITHM ]; then
         echo $COMP_ALGORITHM   > $ZRAM_PATH/comp_algorithm || true
     fi
     echo $ZRAM_SIZE        > $ZRAM_PATH/disksize
