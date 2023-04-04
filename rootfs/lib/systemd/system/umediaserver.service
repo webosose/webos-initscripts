@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2018 LG Electronics, Inc.
+# Copyright (c) 2017-2023 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,3 +25,5 @@ OOMScoreAdjust=-500
 EnvironmentFile=-/var/systemd/system/env/umediaserver.env
 ExecStart=/usr/sbin/umediaserver --conf /etc/umediaserver/umediaserver_resource_config.txt
 Restart=on-failure
+User=media
+Group=media
