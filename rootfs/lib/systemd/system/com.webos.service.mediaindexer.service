@@ -1,4 +1,4 @@
-# Copyright (c) 2020 LG Electronics, Inc.
+# Copyright (c) 2020-2023 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,3 +25,5 @@ OOMScoreAdjust=-1000
 EnvironmentFile=-/var/systemd/system/env/com.webos.service.mediaindexer.env
 ExecStart=/usr/sbin/com.webos.service.mediaindexer
 Restart=on-failure
+User=media
+Group=media
