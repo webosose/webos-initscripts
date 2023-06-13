@@ -25,7 +25,7 @@ webos_add_compiler_flags(ALL --std=c++11)
 webos_configure_source_files(cfg ${CMAKE_CURRENT_SOURCE_DIR}/Environment.h)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-include_directories(${PROJECT_BINARY_DIR}/Configured/src/initctl)
+include_directories(${PROJECT_BINARY_DIR}/Configured/src/upstart-utils/initctl)
 add_executable(${BIN_NAME} ${SRC_FILES})
 
 # Linking

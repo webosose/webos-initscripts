@@ -1,4 +1,4 @@
-# Copyright (c) 2007-2021 LG Electronics, Inc.
+# Copyright (c) 2007-2023 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,8 +25,8 @@ webos_component(3 0 0)
 webos_distro_dep()
 webos_distro_variant_dep()
 
-add_subdirectory(src/initctl)
-add_subdirectory(src/utils)
+add_subdirectory(src/upstart-utils/initctl)
+add_subdirectory(src/upstart-utils/utils)
 
 
 #################################
@@ -34,7 +34,7 @@ add_subdirectory(src/utils)
 #################################
 
 set(systemd_enable_systemd_environments
-    rootfs/etc/profile.d/get-systemd-environments.sh)
+    common/etc/profile.d/get-systemd-environments.sh)
 
 install(PROGRAMS
     ${systemd_enable_systemd_environments}
@@ -45,68 +45,68 @@ install(PROGRAMS
 # /etc/tmpfiles.d
 #################################
 
-webos_configure_source_files(systemd_in_tmpfile
-    rootfs/etc/tmpfiles.d/30-run.conf
-    rootfs/etc/tmpfiles.d/31-var.conf)
+webos_configure_source_files(in_tmpfile
+    common/etc/tmpfiles.d/30-run.conf
+    common/etc/tmpfiles.d/31-var.conf)
 
 install(FILES
-    ${systemd_in_tmpfile}
+    ${in_tmpfile}
     DESTINATION ${WEBOS_INSTALL_SYSCONFDIR}/tmpfiles.d)
 
 
 #################################
-# /etc/systemd
+# /etc/systemd/system.conf.d
 #################################
 
 webos_configure_source_files(systemd_in_global_env
-    rootfs/etc/systemd/system.conf.d/webos-global.conf)
+    common/etc/systemd/system.conf.d/webos-global.conf)
 
 set(systemd_conf
-    rootfs/etc/systemd/system.conf.d/system.conf)
+    common/etc/systemd/system.conf.d/system.conf)
 
 install(FILES
     ${systemd_in_global_env}
     ${systemd_conf}
     DESTINATION ${WEBOS_INSTALL_SYSCONFDIR}/systemd/system.conf.d)
 
+
 #################################
 # /etc/systemd/system
 #################################
 
 file(GLOB etc_units
-    "rootfs/etc/systemd/system/*.service"
-    "rootfs/etc/systemd/system/*.socket"
-    "rootfs/etc/systemd/system/*.timer")
+    "common/etc/systemd/system/*.service"
+    "common/etc/systemd/system/*.socket"
+    "common/etc/systemd/system/*.timer")
 
-install(FILES
-    ${etc_units}
-    DESTINATION ${WEBOS_INSTALL_SYSCONFDIR}/systemd/system)
+install(FILES ${etc_units} DESTINATION ${WEBOS_INSTALL_SYSCONFDIR}/systemd/system)
+
 
 #################################
 # /lib/systemd/system
 #################################
 
 file(GLOB lib_units
-    "rootfs/lib/systemd/system/*.slice"
-    "rootfs/lib/systemd/system/*.service"
-    "rootfs/lib/systemd/system/*.path"
-    "rootfs/lib/systemd/system/*.target")
+    "common/lib/systemd/system/*.slice"
+    "common/lib/systemd/system/*.service"
+    "common/lib/systemd/system/*.path"
+    "common/lib/systemd/system/*.target")
 
 install(FILES ${lib_units} DESTINATION ${WEBOS_INSTALL_BASE_LIBDIR}/systemd/system)
 
 set(lib_wants
-    rootfs/lib/systemd/system/default-webos.target.wants
-    rootfs/lib/systemd/system/local-fs.target.wants
-    rootfs/lib/systemd/system/multi-user.target.wants
-    rootfs/lib/systemd/system/webos-bd.target.wants
-    rootfs/lib/systemd/system/webos-cbd.target.wants
-    rootfs/lib/systemd/system/webos-dis.target.wants
-    rootfs/lib/systemd/system/webos-ibd.target.wants
-    rootfs/lib/systemd/system/webos-mbd.target.wants
-    rootfs/lib/systemd/system/webos-rbd.target.wants
-    rootfs/lib/systemd/system/multi-user.target.wants
-    rootfs/lib/systemd/system/webos-bd.target.wants
-    rootfs/lib/systemd/system/webos-cbd.target.wants)
+    common/lib/systemd/system/default-webos.target.wants
+    common/lib/systemd/system/local-fs.target.wants
+    common/lib/systemd/system/multi-user.target.wants
+    common/lib/systemd/system/webos-bd.target.wants
+    common/lib/systemd/system/webos-cbd.target.wants
+    common/lib/systemd/system/webos-dis.target.wants
+    common/lib/systemd/system/webos-ibd.target.wants
+    common/lib/systemd/system/webos-mbd.target.wants
+    common/lib/systemd/system/webos-rbd.target.wants
+    common/lib/systemd/system/multi-user.target.wants
+    common/lib/systemd/system/webos-bd.target.wants
+    common/lib/systemd/system/webos-cbd.target.wants)
 
 install(DIRECTORY
     ${lib_wants}
@@ -117,24 +117,24 @@ install(DIRECTORY
 # /lib/systemd/system/scripts
 #################################
 
-install(PROGRAMS rootfs/lib/systemd/system/scripts/save-journald-logs.py DESTINATION ${WEBOS_INSTALL_BASE_LIBDIR}/systemd/system/scripts)
+install(PROGRAMS common/lib/systemd/system/scripts/save-journald-logs.py DESTINATION ${WEBOS_INSTALL_BASE_LIBDIR}/systemd/system/scripts)
 
 webos_configure_source_files(lib_in_scripts
-    rootfs/lib/systemd/system/scripts/configurator-db8.sh
-    rootfs/lib/systemd/system/scripts/devmode.sh
-    rootfs/lib/systemd/system/scripts/fluent-bit.sh
-    rootfs/lib/systemd/system/scripts/jail.sh
-    rootfs/lib/systemd/system/scripts/luna-download-mgr.sh
-    rootfs/lib/systemd/system/scripts/maliit-server.sh
-    rootfs/lib/systemd/system/scripts/populate-volatile.sh
-    rootfs/lib/systemd/system/scripts/sam.sh
-    rootfs/lib/systemd/system/scripts/settings-service.sh
-    rootfs/lib/systemd/system/scripts/swap-on.sh
-    rootfs/lib/systemd/system/scripts/usbctrl.sh
-    rootfs/lib/systemd/system/scripts/webos-bluetooth-service.sh
-    rootfs/lib/systemd/system/scripts/webos-connman-adapter.sh
-    rootfs/lib/systemd/system/scripts/prepare-system-dirs.sh
-    rootfs/lib/systemd/system/scripts/zram-on.sh)
+    common/lib/systemd/system/scripts/configurator-db8.sh
+    common/lib/systemd/system/scripts/devmode.sh
+    common/lib/systemd/system/scripts/fluent-bit.sh
+    common/lib/systemd/system/scripts/jail.sh
+    common/lib/systemd/system/scripts/luna-download-mgr.sh
+    common/lib/systemd/system/scripts/maliit-server.sh
+    common/lib/systemd/system/scripts/populate-volatile.sh
+    common/lib/systemd/system/scripts/sam.sh
+    common/lib/systemd/system/scripts/settings-service.sh
+    common/lib/systemd/system/scripts/swap-on.sh
+    common/lib/systemd/system/scripts/usbctrl.sh
+    common/lib/systemd/system/scripts/webos-bluetooth-service.sh
+    common/lib/systemd/system/scripts/webos-connman-adapter.sh
+    common/lib/systemd/system/scripts/prepare-system-dirs.sh
+    common/lib/systemd/system/scripts/zram-on.sh)
 
 install(PROGRAMS ${lib_in_scripts} DESTINATION ${WEBOS_INSTALL_BASE_LIBDIR}/systemd/system/scripts)
 
@@ -144,12 +144,12 @@ install(PROGRAMS ${lib_in_scripts} DESTINATION ${WEBOS_INSTALL_BASE_LIBDIR}/syst
 #################################
 
 webos_configure_source_files(preference-dir-info
-   rootfs/usr/bin/preference-dir-info)
+   common/usr/bin/preference-dir-info)
 
 install(PROGRAMS ${preference-dir-info} DESTINATION ${WEBOS_INSTALL_BINDIR})
 
 file(GLOB bin_in_scripts
-    "rootfs/usr/bin/collect"
-    "rootfs/usr/bin/*info")
+    "common/usr/bin/collect"
+    "common/usr/bin/*info")
 
 install(PROGRAMS ${bin_in_scripts} DESTINATION ${WEBOS_INSTALL_BINDIR})
