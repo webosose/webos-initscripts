@@ -120,19 +120,10 @@ install(DIRECTORY
 install(PROGRAMS common/lib/systemd/system/scripts/save-journald-logs.py DESTINATION ${WEBOS_INSTALL_BASE_LIBDIR}/systemd/system/scripts)
 
 webos_configure_source_files(lib_in_scripts
-    common/lib/systemd/system/scripts/configurator-db8.sh
-    common/lib/systemd/system/scripts/devmode.sh
-    common/lib/systemd/system/scripts/fluent-bit.sh
     common/lib/systemd/system/scripts/jail.sh
-    common/lib/systemd/system/scripts/luna-download-mgr.sh
-    common/lib/systemd/system/scripts/maliit-server.sh
     common/lib/systemd/system/scripts/populate-volatile.sh
-    common/lib/systemd/system/scripts/sam.sh
-    common/lib/systemd/system/scripts/settings-service.sh
     common/lib/systemd/system/scripts/swap-on.sh
     common/lib/systemd/system/scripts/usbctrl.sh
-    common/lib/systemd/system/scripts/webos-bluetooth-service.sh
-    common/lib/systemd/system/scripts/webos-connman-adapter.sh
     common/lib/systemd/system/scripts/prepare-system-dirs.sh
     common/lib/systemd/system/scripts/zram-on.sh)
 
