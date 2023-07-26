@@ -15,4 +15,4 @@
 # SPDX-License-Identifier: Apache-2.0
 
 [Unit]
-Description="%n"
+Description=webos-initscripts - "%n"

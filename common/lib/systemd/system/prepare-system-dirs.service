@@ -5,7 +5,7 @@
 # LICENSE@@@
 
 [Unit]
-Description=webos - "%n"
+Description=webos-initscripts - "%n"
 DefaultDependencies=no
 Conflicts=shutdown.target
 Before=sysinit.target
