@@ -17,7 +17,7 @@
 # enable swap memory
 
 [Unit]
-Description=webos - "%n"
+Description=webos-initscripts - "%n"
 Wants=zram-on.service
 After=zram-on.service
 

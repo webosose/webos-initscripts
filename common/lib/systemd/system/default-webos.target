@@ -17,4 +17,4 @@
 # Initialy this unit is cloned from multi-user.target
 
 [Unit]
-Description=webos - "%n"
+Description=webos-initscripts - "%n"

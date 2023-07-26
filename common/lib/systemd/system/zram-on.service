@@ -17,7 +17,7 @@
 # enable zram configuration
 
 [Unit]
-Description=webos - "%n"
+Description=webos-initscripts - "%n"
 
 [Service]
 Type=oneshot

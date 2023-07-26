@@ -17,7 +17,7 @@
 # Configure usbnet and novacom if enabled
 
 [Unit]
-Description=webos - "%n"
+Description=webos-initscripts - "%n"
 #Requires=mountall
 #After=mountall
 
