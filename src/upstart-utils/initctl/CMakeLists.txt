@@ -35,5 +35,4 @@ set(LIBS
 target_link_libraries(${BIN_NAME} ${LIBS})
 
 # Install
-webos_build_program(NAME ${BIN_NAME})
-install(TARGETS ${BIN_NAME} DESTINATION ${WEBOS_INSTALL_ROOT}/sbin)
+install(TARGETS ${BIN_NAME} RUNTIME DESTINATION ${WEBOS_INSTALL_BASE_SBINDIR})

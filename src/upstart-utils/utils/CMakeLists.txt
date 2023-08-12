@@ -27,4 +27,4 @@ add_executable(status Status.cpp)
 add_executable(restart Restart.cpp)
 
 # Install
-install(TARGETS start stop status restart RUNTIME DESTINATION ${WEBOS_INSTALL_ROOT}/sbin)
+install(TARGETS start stop status restart RUNTIME DESTINATION ${WEBOS_INSTALL_BASE_SBINDIR})
