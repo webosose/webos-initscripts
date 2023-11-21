@@ -39,7 +39,7 @@ DefaultEnvironment=KLOG=/dev/kmsg
 # Qt/wayland
 DefaultEnvironment=QML2_IMPORT_PATH=@WEBOS_INSTALL_LIBDIR@/qml
 DefaultEnvironment=QT_HARFBUZZ=new
-DefaultEnvironment=QT_IM_MODULE=wayland
+DefaultEnvironment=QT_IM_MODULE=wayland-webos
 DefaultEnvironment=QT_QPA_FONTDIR=@WEBOS_INSTALL_DATADIR@/fonts
 DefaultEnvironment=QT_QPA_PLATFORM=wayland
 DefaultEnvironment=QT_WAYLAND_DISABLE_WINDOWDECORATION=1
