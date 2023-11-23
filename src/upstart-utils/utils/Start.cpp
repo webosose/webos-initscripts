@@ -40,7 +40,7 @@ void Start::process(vector<string>& cmdLine) {
   }
 
   string cmd = "systemctl start " + cmdLine[1];
-  exec(cmd);
+  exec(std::move(cmd));
   cout << "start " << cmdLine[1] << endl;
 }
 
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     dbgmsg += " ";
   }
 
-  g_logger.write(dbgmsg);
+  g_logger.write(std::move(dbgmsg));
 
   Start start;
   try {

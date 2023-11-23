@@ -40,7 +40,7 @@ void Stop::process(vector<string>& cmdLine) {
   }
 
   string cmd = "systemctl stop " + cmdLine[1];
-  exec(cmd);
+  exec(std::move(cmd));
   cout << "stop " << cmdLine[1] << endl;
 }
 
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     dbgmsg += " ";
   }
 
-  g_logger.write(dbgmsg);
+  g_logger.write(std::move(dbgmsg));
 
   Stop stop;
   try {

@@ -40,7 +40,7 @@ void Restart::process(vector<string>& cmdLine) {
   }
 
   string cmd = "systemctl restart " + cmdLine[1];
-  exec(cmd);
+  exec(std::move(cmd));
   cout << "restart " << cmdLine[1] << endl;
 }
 
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     dbgmsg += " ";
   }
 
-  g_logger.write(dbgmsg);
+  g_logger.write(std::move(dbgmsg));
 
   Restart restart;
   try {

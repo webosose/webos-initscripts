@@ -70,7 +70,7 @@ bool Systemd::startUnit(string name, bool isBlock) {
         command += "--no-block ";
     command += name;
 
-    std::string result = Util::exec(command);
+    std::string result = Util::exec(std::move(command));
     return true;
 }
 

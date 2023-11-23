@@ -67,7 +67,7 @@ void InitCtl::process(std::vector<std::string> cmdLine, bool bootmode)
 
     g_logger.write("[DEBUG] TOUCH : " + logicalName);
     string touchCommand = "/bin/touch /tmp/" + logicalName;
-    Util::exec(touchCommand);
+    Util::exec(std::move(touchCommand));
 
     if (s_blockUnits.end() != s_blockUnits.find(logicalName)) {
         g_logger.write("[INFO] BLOCK UNIT : " + s_blockUnits.find(logicalName)->second);
@@ -78,6 +78,6 @@ void InitCtl::process(std::vector<std::string> cmdLine, bool bootmode)
     } else if (s_notifyUnits.end() != s_notifyUnits.find(logicalName)) {
         string processName = s_notifyUnits.find(logicalName)->second;
         g_logger.write("[INFO] NOTIFY : " + processName);
-        Systemd::getInstance().notify(processName);
+        Systemd::getInstance().notify(std::move(processName));
     }
 }

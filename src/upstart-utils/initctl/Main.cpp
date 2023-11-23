@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 
   InitCtl initCtl;
   try {
-      initCtl.process(cmdLine, bootmode);
+      initCtl.process(std::move(cmdLine), bootmode);
   } catch (const std::exception& e) {
       g_logger.write("[DEBUG] initctl process is failed=Message" + string(e.what()));
   }
