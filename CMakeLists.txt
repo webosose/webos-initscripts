@@ -1,4 +1,4 @@
-# Copyright (c) 2007-2023 LG Electronics, Inc.
+# Copyright (c) 2007-2024 LG Electronics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,9 +21,6 @@ project(webos-initscripts C CXX)
 include(webOS/webOS)
 webos_modules_init(1 0 0 QUALIFIER RC7)
 webos_component(3 0 0)
-
-webos_distro_dep()
-webos_distro_variant_dep()
 
 add_subdirectory(src/upstart-utils/initctl)
 add_subdirectory(src/upstart-utils/utils)

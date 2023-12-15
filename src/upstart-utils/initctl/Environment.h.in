@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2018 LG Electronics, Inc.
+// Copyright (c) 2017-2024 LG Electronics, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,12 +16,6 @@
 
 #ifndef ENVIRONMENT_H_
 #define ENVIRONMENT_H_
-
-#define WEBOS_TARGET_DISTRO                "@WEBOS_TARGET_DISTRO@"
-#define WEBOS_TARGET_DISTRO_VARIANT        "@WEBOS_TARGET_DISTRO_VARIANT@"
-#define WEBOS_TARGET_MACHINE               "@WEBOS_TARGET_MACHINE@"
-#define WEBOS_TARGET_MACHINE_IMPL          "@WEBOS_TARGET_MACHINE_IMPL@"
-#define WEBOS_TARGET_SOC_FAMILY            "@WEBOS_TARGET_SOC_FAMILY@"
 
 #define WEBOS_INSTALL_BINDIR               "@WEBOS_INSTALL_BINDIR@"
 #define WEBOS_INSTALL_SBINDIR              "@WEBOS_INSTALL_SBINDIR@"
