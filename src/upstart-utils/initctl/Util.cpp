@@ -26,16 +26,17 @@ string Util::exec(std::string cmd) {
     g_logger.write("[FATAL] pipe open failed!");
     throw std::runtime_error("popen() failed!");
   }
-  try {
-    while (!feof(pipe)) {
-      if (fgets(buffer, sizeof(buffer), pipe) != NULL)
-        result += buffer;
+
+  while (!feof(pipe)) {
+    if (fgets(buffer, sizeof(buffer), pipe) != NULL)
+      result += buffer;
+    else {
+      pclose(pipe);
+      g_logger.write("[FATAL] read from pipe failed");
+      return result;
     }
-  } catch (...) {
-    pclose(pipe);
-    g_logger.write("[FATAL] read from pipe failed");
-    return result;
   }
+
   pclose(pipe);
   return result;
 }
