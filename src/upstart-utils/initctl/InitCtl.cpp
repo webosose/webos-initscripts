@@ -70,14 +70,23 @@ void InitCtl::process(std::vector<std::string> cmdLine, bool bootmode)
     Util::exec(std::move(touchCommand));
 
     if (s_blockUnits.end() != s_blockUnits.find(logicalName)) {
-        g_logger.write("[INFO] BLOCK UNIT : " + s_blockUnits.find(logicalName)->second);
-        Systemd::getInstance().startUnit(s_blockUnits.find(logicalName)->second, true);
+        auto item = s_blockUnits.find(logicalName);
+        if (item != s_blockUnits.end()) {
+            g_logger.write("[INFO] BLOCK UNIT : " + item->second);
+            Systemd::getInstance().startUnit(item->second, true);
+        }
     } else if (s_noBlockUnits.end() != s_noBlockUnits.find(logicalName)) {
-        g_logger.write("[INFO] NOBLOCK UNIT : " + s_noBlockUnits.find(logicalName)->second);
-        Systemd::getInstance().startUnit(s_noBlockUnits.find(logicalName)->second, false);
+        auto item = s_noBlockUnits.find(logicalName);
+        if (item != s_noBlockUnits.end()) {
+            g_logger.write("[INFO] NOBLOCK UNIT : " + item->second);
+            Systemd::getInstance().startUnit(item->second, false);
+        }
     } else if (s_notifyUnits.end() != s_notifyUnits.find(logicalName)) {
-        string processName = s_notifyUnits.find(logicalName)->second;
-        g_logger.write("[INFO] NOTIFY : " + processName);
-        Systemd::getInstance().notify(std::move(processName));
+        auto item = s_notifyUnits.find(logicalName);
+        if (item != s_notifyUnits.end()) {
+            string processName = item->second;
+            g_logger.write("[INFO] NOTIFY : " + processName);
+            Systemd::getInstance().notify(std::move(processName));
+        }
     }
 }
